@@ -5,6 +5,8 @@ import { Message, MessageTypeEnum } from "../../types";
 import Transcript, { TranscriptRecord } from "./Transcript";
 import { saveDataLocally } from "../helper/saveDataLocally";
 import { checkDataLocally } from "../helper/checkDataLocally";
+import { handlePageIconChangeByStatus } from "../../background/helper";
+import { getTabId } from "../helper/getTabId";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -22,12 +24,11 @@ const Popup = () => {
 
   const getDataHandler = () => {
     console.log("getDataHandler");
+    setLoading(true);
     // check currentVideoId
     if (currentVideoId) {
       // check if s3 bucket has the data already (scraping done in past)
-      setLoading(true);
       checkS3BucketForData(currentVideoId).then((data) => {
-        setLoading(false);
         if (!data) {
           // call fisher to scrape data
           console.log("need to call fisher now..");
@@ -35,9 +36,7 @@ const Popup = () => {
             messageType: MessageTypeEnum.CALL_FISHER,
             videoId: currentVideoId,
           };
-          setLoading(true);
           sendMessageToContentScript(fisherRequest, (response) => {
-            setLoading(false);
             if (response) {
               const { tData, cData } = response;
               if (tData) {
@@ -92,6 +91,12 @@ const Popup = () => {
       setCurrentVideoId(videoId);
     });
   }, []);
+
+  useEffect(() => {
+    getTabId((tabId) => {
+      handlePageIconChangeByStatus(loading, tabId);
+    });
+  }, [loading]);
 
   useEffect(() => {
     if (transcriptData.length && currentVideoId) {
