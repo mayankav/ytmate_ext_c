@@ -18,20 +18,8 @@ function handlePageIconChangeByTab(tabUrl: string, tabId: number) {
     setPageIcon("active", tabId);
   } else {
     setPageIcon("inactive", tabId);
+    chrome.action.disable();
   }
-  // chrome.storage.local.get("transcriptOwnerTab", (data) => {
-  //   const transcriptOwnerTabId =
-  //     data.transcriptOwnerTab?.transcriptOwnerTabId;
-  //   const transcriptOwnerTabUrl =
-  //     data.transcriptOwnerTab?.transcriptOwnerTabUrl;
-  //   if (transcriptOwnerTabId && transcriptOwnerTabUrl) {
-  //     if (transcriptOwnerTabUrl === tabUrl) {
-  //       setPageIcon("green", tabId);
-  //     } else {
-  //       setPageIcon("yellow", tabId);
-  //     }
-  //   }
-  // });
 }
 
 export { handlePageIconChangeByTab, setPageIcon };

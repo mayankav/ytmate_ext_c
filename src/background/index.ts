@@ -1,9 +1,5 @@
 import { handlePageIconChangeByTab } from "./helper";
 
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("Extension installed.");
-});
-
 // when you switch to some other tab
 chrome.tabs.onActivated.addListener((activeInfo) => {
   const tabId = activeInfo.tabId;
