@@ -6,6 +6,14 @@ import { changeVideoTime } from "./helper/changeVideoTime";
 export {};
 window.onload = (event: Event) => {
   console.log("The webpage is fully loaded");
+  var player = document.querySelector("video");
+  // Add an event listener to the player's timeupdate event
+  player?.addEventListener("timeupdate", function () {
+    // Send a message to the background script with the current timestamp
+    chrome.runtime.sendMessage({ timestamp: player.currentTime });
+  });
+
+  // seeking event not updating properly
 };
 
 chrome.runtime.sendMessage("I am loading content script", (response) => {
