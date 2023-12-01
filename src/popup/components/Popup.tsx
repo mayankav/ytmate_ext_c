@@ -15,7 +15,7 @@ const Popup = () => {
     let contents = await checkS3Bucket(directoryName);
     return contents;
   };
-  const [currentTS, setCurrentTS] = useState(0);
+  const [currentTS, setCurrentTS] = useState<number>();
   const getDataHandler = () => {
     console.log("getDataHandler");
     // get the video id
