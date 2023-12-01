@@ -11,6 +11,12 @@ window.onload = (event: Event) => {
   player?.addEventListener("timeupdate", function () {
     // Send a message to the background script with the current timestamp
     chrome.runtime.sendMessage({ timestamp: player.currentTime });
+    chrome.storage.local.set({
+      lastTimestampByVideoId: {
+        timestamp: player.currentTime,
+        videoId: getUniqueVideoId(),
+      },
+    });
   });
 
   // seeking event not updating properly
