@@ -16,6 +16,7 @@ const Popup = () => {
     return contents;
   };
   const [currentTS, setCurrentTS] = useState<number>();
+  const [currentVideoId, setCurrentVideoId] = useState<string>();
   const getDataHandler = () => {
     console.log("getDataHandler");
     // get the video id
@@ -25,6 +26,7 @@ const Popup = () => {
     sendMessageToContentScript(detectVideoId, (response) => {
       const videoId = response.uniqueVideoId;
       console.log("videoId", videoId);
+      setCurrentVideoId(videoId);
       if (videoId) {
         // check if s3 bucket has the data already (scraping done in past)
         checkS3BucketForData(videoId).then((data) => {
@@ -75,15 +77,26 @@ const Popup = () => {
   }, [commentsData, transcriptData]);
 
   useEffect(() => {
+    if (transcriptData.length && currentVideoId) {
+      // update from local storage if available
+      chrome.storage.local.get(["lastTimestampByVideoId"], function (result) {
+        const videoIdFromLocal = result?.lastTimestampByVideoId?.videoId;
+        const lastTimestampFromLocal =
+          result?.lastTimestampByVideoId?.timestamp;
+        // match with current video id
+        if (videoIdFromLocal === currentVideoId && lastTimestampFromLocal) {
+          setCurrentTS(lastTimestampFromLocal);
+        }
+      });
+    }
+
     const updateCurrentVideoTime = function (request: any) {
       setCurrentTS(Math.floor(request.timestamp));
     };
-
-    if (transcriptData.length)
-      chrome.runtime.onMessage.addListener(updateCurrentVideoTime);
+    chrome.runtime.onMessage.addListener(updateCurrentVideoTime);
     return () =>
       chrome.runtime.onMessage.removeListener(updateCurrentVideoTime);
-  }, [transcriptData]);
+  }, [transcriptData, currentVideoId]);
 
   return (
     <div

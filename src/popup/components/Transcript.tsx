@@ -34,7 +34,7 @@ const Transcript = ({
     }
     if (currentPlayingTimestamp >= owntimestamp) {
       if (nextTimeStamp) {
-        if (currentPlayingTimestamp < nextTimeStamp) {
+        if (currentPlayingTimestamp <= nextTimeStamp) {
           return true;
         }
       } else {
@@ -44,12 +44,14 @@ const Transcript = ({
     return false;
   };
 
-  if (activeDivRef.current) {
-    activeDivRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
-  }
+  useEffect(() => {
+    if (activeDivRef.current) {
+      activeDivRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [currentPlayingTimestamp]);
 
   return (
     <div className="transcript-container">
