@@ -1,10 +1,12 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import Popup from "./components/Popup";
 
-// This is the entry file for popup
-const popup = <div>react popup</div>;
+function init() {
+  const appContainer = document.createElement("div");
+  document.body.appendChild(appContainer);
+  const root = createRoot(appContainer);
+  root.render(<Popup />);
+}
 
-const container = document.createElement("div");
-document.body.appendChild(container);
-const root = createRoot(container);
-root.render(popup);
+init();

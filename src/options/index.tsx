@@ -1,10 +1,12 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import Options from "./Options";
 
-// This is the entry file for popup
-const popup = <div>react options</div>;
+function init() {
+  const appContainer = document.createElement("div");
+  document.body.appendChild(appContainer);
+  const root = createRoot(appContainer);
+  root.render(<Options />);
+}
 
-const container = document.createElement("div");
-document.body.appendChild(container);
-const root = createRoot(container);
-root.render(popup);
+init();
