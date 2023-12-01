@@ -23,4 +23,13 @@ function handlePageIconChangeByTab(tabUrl: string, tabId: number) {
   }
 }
 
-export { handlePageIconChangeByTab, setPageIcon };
+// pending - unused
+function handlePageIconChangeByStatus(busy: boolean, tabId: number) {
+  if (busy) {
+    setPageIcon("busy", tabId);
+  } else {
+    setPageIcon("active", tabId);
+  }
+}
+
+export { handlePageIconChangeByTab, handlePageIconChangeByStatus, setPageIcon };

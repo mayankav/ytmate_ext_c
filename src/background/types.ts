@@ -1,1 +1,1 @@
-type AppState = "active" | "inactive"; 
+type AppState = "active" | "inactive" | "busy";
