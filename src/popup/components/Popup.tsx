@@ -68,13 +68,11 @@ const Popup = () => {
     sendMessageToContentScript(ifVideoHasSubtitles, (response) => {
       if (response.hasSubtitles) {
         setHasCC(true);
+      } else {
+        setHasCC(false);
       }
     });
   }, []);
-  useEffect(() => {
-    console.log("commentsData uf", commentsData);
-    console.log("transcriptData uf", transcriptData);
-  }, [commentsData, transcriptData]);
 
   useEffect(() => {
     if (transcriptData.length && currentVideoId) {
