@@ -4,6 +4,8 @@ import { callFisher } from "../helper/callFisher";
 import { checkS3Bucket } from "../helper/checkS3Bucket";
 import { Message, MessageTypeEnum } from "../../types";
 import Transcript, { TranscriptRecord } from "./Transcript";
+import { saveDataLocally } from "../helper/saveDataLocally";
+import { checkDataLocally } from "../helper/checkDataLocally";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -19,46 +21,40 @@ const Popup = () => {
   const [currentVideoId, setCurrentVideoId] = useState<string>();
   const getDataHandler = () => {
     console.log("getDataHandler");
-    // get the video id
-    const detectVideoId: Message = {
-      messageType: MessageTypeEnum.GET_UNIQUE_VIDEO_ID,
-    };
-    sendMessageToContentScript(detectVideoId, (response) => {
-      const videoId = response.uniqueVideoId;
-      console.log("videoId", videoId);
-      setCurrentVideoId(videoId);
-      if (videoId) {
-        // check if s3 bucket has the data already (scraping done in past)
-        checkS3BucketForData(videoId).then((data) => {
-          if (!data) {
-            // call fisher to scrape data
-            console.log("need to call fisher now..");
-            callFisher(videoId).then((data) => {
-              setTranscriptData(
-                Object.entries(data.transcript.transcriptData).map(
-                  ([key, val]) => ({
-                    subtitle: val as string,
-                    timestamp: parseInt(key),
-                  })
-                )
-              );
-              setCommentsData(data.comments);
-            });
-          } else {
-            console.log("s3 bucket has the data already");
-            setTranscriptData(
-              Object.entries(data.transcript.transcriptData).map(
-                ([key, val]) => ({
-                  subtitle: val as string,
-                  timestamp: parseInt(key),
-                })
-              )
+    // check currentVideoId
+    if (currentVideoId) {
+      // check if s3 bucket has the data already (scraping done in past)
+      checkS3BucketForData(currentVideoId).then((data) => {
+        if (!data) {
+          // call fisher to scrape data
+          console.log("need to call fisher now..");
+          callFisher(currentVideoId).then((data) => {
+            const tData = Object.entries(data.transcript.transcriptData).map(
+              ([key, val]) => ({
+                subtitle: val as string,
+                timestamp: parseInt(key),
+              })
             );
-            setCommentsData(data.comments);
-          }
-        });
-      }
-    });
+            const cData = data.comments;
+            saveDataLocally(currentVideoId, tData, cData);
+            setTranscriptData(tData);
+            setCommentsData(cData);
+          });
+        } else {
+          console.log("s3 bucket has the data already");
+          const tData = Object.entries(data.transcript.transcriptData).map(
+            ([key, val]) => ({
+              subtitle: val as string,
+              timestamp: parseInt(key),
+            })
+          );
+          const cData = data.comments;
+          saveDataLocally(currentVideoId, tData, cData);
+          setTranscriptData(tData);
+          setCommentsData(cData);
+        }
+      });
+    }
   };
   useEffect(() => {
     // check if video has subtitles
@@ -71,6 +67,21 @@ const Popup = () => {
       } else {
         setHasCC(false);
       }
+    });
+  }, []);
+
+  useEffect(() => {
+    // get the video id
+    const detectVideoId: Message = {
+      messageType: MessageTypeEnum.GET_UNIQUE_VIDEO_ID,
+    };
+    sendMessageToContentScript(detectVideoId, (response) => {
+      const videoId = response.uniqueVideoId;
+      checkDataLocally(videoId, (tData, cData) => {
+        if (tData) setTranscriptData(tData);
+        if (cData) setCommentsData(cData);
+      });
+      setCurrentVideoId(videoId);
     });
   }, []);
 
@@ -102,11 +113,10 @@ const Popup = () => {
         width: "320px",
       }}
     >
-      {hasCC ? (
+      {hasCC && transcriptData.length < 1 && (
         <button onClick={getDataHandler}>Get Data</button>
-      ) : (
-        "This video does not have subtitles"
       )}
+      {!hasCC && "This video does not have subtitles"}
       <Transcript
         transcriptData={transcriptData}
         currentPlayingTimestamp={currentTS}

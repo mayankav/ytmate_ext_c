@@ -12,7 +12,7 @@ export function saveDataLocally(
 
   chrome.storage.local.set(
     {
-      key: dataToSave,
+      [key]: dataToSave,
     },
     () => {
       console.log("Data saved locally:", dataToSave);

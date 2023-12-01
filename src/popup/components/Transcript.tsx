@@ -60,6 +60,7 @@ const Transcript = ({
         const nextTimeStamp = transcriptData[i + 1];
         return (
           <div
+            key={record.timestamp}
             tabIndex={i}
             className={
               isActive(owntimestamp, nextTimeStamp?.timestamp)
@@ -72,7 +73,6 @@ const Transcript = ({
                 : null
             }
             onClick={() => timeClickHandler(record.timestamp)}
-            key={record.timestamp}
           >
             <div
               style={{
