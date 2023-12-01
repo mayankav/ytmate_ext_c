@@ -4,6 +4,7 @@ import { Message, MessageTypeEnum } from "../../types";
 import { convertTimeToMMSS } from "../helper/timeConverter";
 interface TranscriptProps {
   transcriptData: Array<TranscriptRecord>;
+  currentPlayingTimestamp: number;
 }
 export type TranscriptRecord = {
   subtitle: string;

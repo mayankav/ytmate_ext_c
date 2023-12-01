@@ -15,6 +15,7 @@ const Popup = () => {
     let contents = await checkS3Bucket(directoryName);
     return contents;
   };
+  const [currentTS, setCurrentTS] = useState(0);
   const getDataHandler = () => {
     console.log("getDataHandler");
     // get the video id
@@ -72,6 +73,18 @@ const Popup = () => {
     console.log("commentsData uf", commentsData);
     console.log("transcriptData uf", transcriptData);
   }, [commentsData, transcriptData]);
+
+  useEffect(() => {
+    const updateCurrentVideoTime = function (request: any) {
+      setCurrentTS(Math.floor(request.timestamp));
+    };
+
+    if (transcriptData.length)
+      chrome.runtime.onMessage.addListener(updateCurrentVideoTime);
+    return () =>
+      chrome.runtime.onMessage.removeListener(updateCurrentVideoTime);
+  }, [transcriptData]);
+
   return (
     <div
       style={{
@@ -83,7 +96,10 @@ const Popup = () => {
       ) : (
         "This video does not have subtitles"
       )}
-      <Transcript transcriptData={transcriptData} />
+      <Transcript
+        transcriptData={transcriptData}
+        currentPlayingTimestamp={currentTS}
+      />
     </div>
   );
 };
