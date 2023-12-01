@@ -16,6 +16,7 @@ function setPageIcon(appState: AppState, tabId: number) {
 function handlePageIconChangeByTab(tabUrl: string, tabId: number) {
   if (tabUrl.includes(YOUTUBE_URL)) {
     setPageIcon("active", tabId);
+    chrome.action.enable();
   } else {
     setPageIcon("inactive", tabId);
     chrome.action.disable();
