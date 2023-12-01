@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "cleanup": "rm -rf node_modules dist",
     "dev": "webpack",
     "watch": "webpack --watch --no-devtool --progress --config webpack.config.js"
   },
