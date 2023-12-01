@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { sendMessageToContentScript } from "../helper/sendMessageToContentScript";
 import { Message, MessageTypeEnum } from "../../types";
+import { convertTimeToMMSS } from "../helper/timeConverter";
 interface TranscriptProps {
   transcriptData: Array<TranscriptRecord>;
 }
@@ -29,22 +30,22 @@ const Transcript = ({ transcriptData }: TranscriptProps) => {
         gap: "4px",
       }}
     >
-      {transcriptData.map((record) => (
+      {transcriptData.map((record, i) => (
         <div
+          onClick={() => timeClickHandler(record.timestamp)}
           key={record.timestamp}
           style={{
             display: "flex",
             gap: "8px",
+            cursor: "pointer",
           }}
         >
           <div
-            onClick={() => timeClickHandler(record.timestamp)}
             style={{
-              cursor: "pointer",
               color: "blue",
             }}
           >
-            {record.timestamp}
+            {convertTimeToMMSS(record.timestamp)}
           </div>
           <div>{record.subtitle}</div>
         </div>
