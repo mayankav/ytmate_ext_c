@@ -1,0 +1,35 @@
+.transcript-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 32px;
+  align-items: center;
+  overflow: auto;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 12px;
+  transition: all 0.2s ease-in-out;
+}
+
+.subtitle {
+  flex: 1;
+  text-align: center;
+}
+
+.active {
+  background: lightseagreen;
+  color: white;
+  transform: scale(1.1);
+}
+
+.inactive {
+  background: white;
+  color: black;
+  transform: scale(1);
+}
