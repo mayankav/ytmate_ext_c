@@ -247,9 +247,11 @@ const Popup = () => {
     <div className="transcript-container">
       {!hasCC && <span>Video does not have subtitles</span>}
       {hasCC && transcriptData.length < 1 && (
-        <EmptyTranscriptScreen fetchTranscriptHandler={getDataHandler} />
+        <EmptyTranscriptScreen
+          loading={loading}
+          fetchTranscriptHandler={getDataHandler}
+        />
       )}
-      {loading && <span>Loading...</span>}
       {transcriptData.length > 0 && (
         <div className="scroll-wrapper">
           <ShowTranscripts

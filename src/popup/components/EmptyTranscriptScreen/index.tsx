@@ -6,9 +6,11 @@ import "./index.scss";
 
 interface EmptyTranscriptScreenProps {
   fetchTranscriptHandler: () => void;
+  loading: boolean;
 }
 const EmptyTranscriptScreen = ({
   fetchTranscriptHandler,
+  loading,
 }: EmptyTranscriptScreenProps) => {
   return (
     <div className="empty-transcript-wrapper">
@@ -23,7 +25,7 @@ const EmptyTranscriptScreen = ({
         iconRight={<TranscriptIconWhite />}
         onClick={fetchTranscriptHandler}
       >
-        See Transcript
+        {loading ? "Loading..." : "See Transcript"}
       </Button>
     </div>
   );
