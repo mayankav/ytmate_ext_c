@@ -1,4 +1,3 @@
-import { getUniqueVideoId } from "../content/helper/getUniqueVideoId";
 import { MessageToBgScriptTypeEnum } from "../types";
 import { handlePageIconChangeByTab } from "./helper";
 import { getTabId } from "./helper/getTabId";

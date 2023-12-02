@@ -20,6 +20,7 @@ const AskAI = () => {
   const [promptText, setPromptText] = useState("");
   const [answerText, setAnswerText] = useState("");
   const [answerInImage, setAnswerInImage] = useState(false);
+  const [loading, setLoading] = useState(false);
   const generateAnswer = () => {
     const message: MessageToBgScript = {
       action: MessageToBgScriptTypeEnum.CALL_AN_API,
@@ -28,6 +29,7 @@ const AskAI = () => {
       question: promptText,
     };
     if (promptText.length > 0) {
+      setLoading(true);
       sendMessageToBgScript(message, (response) => {});
     }
   };
@@ -37,7 +39,7 @@ const AskAI = () => {
 
   useEffect(() => {
     let interval;
-    if (answerText.length < 1) {
+    if (answerText.length < 1 || loading) {
       const message: MessageToContentScript = {
         messageType: MessageToContentScriptTypeEnum.GET_UNIQUE_VIDEO_ID,
       };
@@ -46,7 +48,9 @@ const AskAI = () => {
         if (videoId) {
           interval = setInterval(() => {
             checkAnswerLocally(videoId, (data) => {
+              console.log("checked ans locally..");
               setAnswerText(data);
+              setLoading(false);
             });
           }, 500);
         }
@@ -66,7 +70,7 @@ const AskAI = () => {
       )}
       <textarea onChange={handlePromptChange} />
       <Button iconRight={<AskMeIconWhite />} onClick={generateAnswer}>
-        Generate
+        {loading ? "Loading..." : "Generate"}
       </Button>
     </div>
   );
