@@ -10,7 +10,10 @@ import {
 } from "../../types";
 import ShowTranscripts from "./ShowTranscripts";
 import { saveDataLocally } from "../helper/saveDataLocally";
-import { checkDataLocally } from "../helper/checkDataLocally";
+import {
+  checkDataLocally,
+  checkIsModelTrained,
+} from "../helper/checkDataLocally";
 import { getTabId } from "../helper/getTabId";
 import { checkIsTabBusy } from "../helper/setTabBusy";
 import Button from "./ui-components/button";
@@ -163,22 +166,26 @@ const Popup = () => {
   // training the model through bg script
   useEffect(() => {
     if (currentVideoId) {
-      if (commentsData.length > 0) {
-        const message: MessageToBgScript = {
-          action: MessageToBgScriptTypeEnum.CALL_AN_API,
-          apiName: "trainModel",
-          source: "comments",
-        };
-        sendMessageToBgScript(message, (res) => {});
-      }
-      if (transcriptData.length > 0) {
-        const message: MessageToBgScript = {
-          action: MessageToBgScriptTypeEnum.CALL_AN_API,
-          apiName: "trainModel",
-          source: "video",
-        };
-        sendMessageToBgScript(message, (res) => {});
-      }
+      checkIsModelTrained(currentVideoId, (isModelTrained) => {
+        if (!isModelTrained) {
+          if (commentsData.length > 0) {
+            const message: MessageToBgScript = {
+              action: MessageToBgScriptTypeEnum.CALL_AN_API,
+              apiName: "trainModel",
+              source: "comments",
+            };
+            sendMessageToBgScript(message, (res) => {});
+          }
+          if (transcriptData.length > 0) {
+            const message: MessageToBgScript = {
+              action: MessageToBgScriptTypeEnum.CALL_AN_API,
+              apiName: "trainModel",
+              source: "video",
+            };
+            sendMessageToBgScript(message, (res) => {});
+          }
+        }
+      });
     }
   }, [commentsData, transcriptData, currentVideoId]);
 
@@ -245,10 +252,10 @@ const Popup = () => {
 
   return (
     <div className="transcript-container">
-      {!hasCC && <span>Video does not have subtitles</span>}
-      {hasCC && transcriptData.length < 1 && (
+      {transcriptData.length < 1 && (
         <EmptyTranscriptScreen
           loading={loading}
+          hasCC={hasCC}
           fetchTranscriptHandler={getDataHandler}
         />
       )}

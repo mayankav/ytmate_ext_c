@@ -1,3 +1,5 @@
+import { MessageToBgScript, MessageToBgScriptTypeEnum } from "../../types";
+
 export async function callFisher(videoId: string) {
   // The aws api gateway is configured with path param i.e. videoId
   const fisherGateway =
@@ -15,6 +17,8 @@ export async function callFisher(videoId: string) {
     const data = await response.json();
     setFisherInProgress(false);
     console.log("fisher all end success..");
+    trainModel("comments");
+    trainModel("video");
     return data;
   } catch (error) {
     console.log("fisher all end error 2..");
@@ -30,6 +34,18 @@ function setFisherInProgress(inProgress: boolean) {
   };
   // Send the message to the background script
   chrome.runtime.sendMessage(customMessage, (response) => {
+    console.log("Received response from background script:", response);
+  });
+}
+
+function trainModel(type: "video" | "comments") {
+  const message: MessageToBgScript = {
+    action: MessageToBgScriptTypeEnum.CALL_AN_API,
+    apiName: "trainModel",
+    source: type,
+  };
+  // Send the message to the background script
+  chrome.runtime.sendMessage(message, (response) => {
     console.log("Received response from background script:", response);
   });
 }
