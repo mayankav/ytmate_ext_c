@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { sendMessageToContentScript } from "../helper/sendMessageToContentScript";
 import { checkS3Bucket } from "../helper/checkS3Bucket";
 import { Message, MessageTypeEnum, TranscriptRecord } from "../../types";
-import Transcript from "./Transcript";
+import ShowTranscripts from "./ShowTranscripts";
 import { saveDataLocally } from "../helper/saveDataLocally";
 import {
   checkDataLocally,
@@ -27,6 +27,7 @@ const Popup = () => {
   const [currentVideoId, setCurrentVideoId] = useState<string>();
   const [currentTabId, setCurrentTabId] = useState<number>();
   const [loading, setLoading] = useState(false);
+  const [stopScroll, setStopScroll] = useState(false);
 
   const getDataHandler = () => {
     console.log("getDataHandler");
@@ -175,23 +176,38 @@ const Popup = () => {
     }
   }, [commentsData, transcriptData, currentVideoId]);
 
+  useEffect(() => {
+    const scrollContainer = document.querySelector(".scroll-wrapper");
+    scrollContainer?.addEventListener("scroll", (event) => {
+      console.log(event);
+      // setStopScroll(true);
+    });
+  }, []);
+
+  const syncButtonClickHandler = () => {
+    setStopScroll(false);
+  };
+
   return (
-    <div
-      style={{
-        width: "320px",
-      }}
-    >
-      {loading
-        ? "Loading...."
-        : hasCC &&
-          transcriptData.length < 1 && (
-            <button onClick={getDataHandler}>Get Data</button>
-          )}
-      {!hasCC && "This video does not have subtitles"}
-      <Transcript
-        transcriptData={transcriptData}
-        currentPlayingTimestamp={currentTS}
-      />
+    <div className="transcript-container">
+      <div className="scroll-wrapper">
+        {loading
+          ? "Loading...."
+          : hasCC &&
+            transcriptData.length < 1 && (
+              <button onClick={getDataHandler}>Get Data</button>
+            )}
+        {!hasCC && "This video does not have subtitles"}
+
+        {transcriptData.length !== 0 && (
+          <ShowTranscripts
+            stopScroll={stopScroll}
+            syncButtonClickHandler={syncButtonClickHandler}
+            transcriptData={transcriptData}
+            currentPlayingTimestamp={currentTS}
+          />
+        )}
+      </div>
     </div>
   );
 };

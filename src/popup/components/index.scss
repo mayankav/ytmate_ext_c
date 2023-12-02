@@ -1,0 +1,114 @@
+@import "root_css";
+
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 566px; // change for responsive values of popup
+  width: 376px; // chnage for responsive values of popup
+  overflow: hidden;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid $border-light;
+  width: 100%;
+  justify-content: center;
+}
+
+section {
+  flex: 1;
+  width: 100%;
+}
+
+footer {
+  padding: 12px 20px;
+  width: 100%;
+}
+
+.popup-tab {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 12px;
+  gap: 8px;
+  align-items: center;
+  font-size: $font-size-m;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid transparent;
+  user-select: none;
+  cursor: pointer;
+  color: $font-inactive;
+  filter: grayscale(100%);
+  &.active {
+    border-bottom: 2px solid $border-active;
+    color: black;
+    filter: grayscale(0%);
+  }
+}
+
+.transcript-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  & > .scroll-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    flex: 1 1 0;
+    overflow-y: auto;
+    width: 100%;
+  }
+}
+
+.transcript-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.transcript-row {
+  display: flex;
+  padding: 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  line-height: 16px;
+  font-size: $font-size-s;
+  font-weight: 400;
+  color: #bfbfbf;
+  &.active {
+    background-color: rgba($color-primary, 0.3);
+    color: black;
+    filter: grayscale(0%);
+  }
+  &.inactive {
+    background: white;
+    filter: grayscale(100%);
+  }
+  .transcript-timestamp {
+    color: $color-primary;
+    font-weight: 500;
+    line-height: 20px;
+  }
+  .transcript-subtitle {
+    flex: 1;
+  }
+}
+
+.sync-button {
+  position: absolute;
+  z-index: 1;
+  bottom: 10px;
+}
