@@ -28,6 +28,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       break;
     case "updateCurrentTimestamp":
       const timestamp = request.timestamp;
+      const videoId = request.videoId;
+      chrome.storage.local.set({
+        lastTimestampByVideoId: {
+          timestamp,
+          videoId,
+        },
+      });
       // Send a message to the popup script with the current timestamp
       chrome.tabs.sendMessage(sender.tab.id, { timestamp });
       break;

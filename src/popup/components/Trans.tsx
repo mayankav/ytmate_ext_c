@@ -46,6 +46,7 @@ const Popup = () => {
           sendMessageToContentScript(fisherRequest, (response) => {
             if (response) {
               const { tData, cData } = response;
+              console.log("response from cs", response);
               if (tData) {
                 setTranscriptData(tData);
               }
@@ -113,12 +114,19 @@ const Popup = () => {
         checkIsTabBusy(currentTabId, (isBusy) => {
           setLoading(isBusy);
         });
-      }, 300);
+      }, 500);
+      checkIsTabBusy(currentTabId, (isBusy) => {
+        setLoading(isBusy);
+      });
     }
     () => {
       clearInterval(interval);
     };
   }, [currentTabId]);
+
+  useEffect(() => {
+    console.log("transcript changed...", transcriptData);
+  }, [transcriptData]);
 
   useEffect(() => {
     if (transcriptData.length && currentVideoId) {
@@ -208,7 +216,7 @@ const Popup = () => {
             )}
         {!hasCC && "This video does not have subtitles"}
 
-        {transcriptData.length !== 0 && (
+        {transcriptData.length > 0 && (
           <ShowTranscripts
             stopScroll={stopScroll}
             syncButtonClickHandler={syncButtonClickHandler}

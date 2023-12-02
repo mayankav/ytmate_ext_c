@@ -11,20 +11,19 @@ window.onload = (event: Event) => {
   console.log("The webpage is fully loaded");
   var player = document.querySelector("video");
   // Add an event listener to the player's timeupdate event
-  player?.addEventListener("timeupdate", function () {
+  if (player) {
+    const videoId = getUniqueVideoId();
     // Send a message to the background script with the current timestamp
-    const customMessage = {
-      action: "updateCurrentTimestamp",
-      timestamp: player.currentTime,
-    };
-    chrome.runtime.sendMessage(customMessage);
-    chrome.storage.local.set({
-      lastTimestampByVideoId: {
+    const sendTimestampUpdatetoBg = () => {
+      const customMessage = {
+        action: "updateCurrentTimestamp",
         timestamp: player.currentTime,
-        videoId: getUniqueVideoId(),
-      },
-    });
-  });
+        videoId: videoId,
+      };
+      chrome.runtime.sendMessage(customMessage);
+    };
+    player.addEventListener("timeupdate", sendTimestampUpdatetoBg);
+  }
 
   // seeking event not updating properly
 };
