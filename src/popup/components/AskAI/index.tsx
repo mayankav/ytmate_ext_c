@@ -17,6 +17,7 @@ import { sendMessageToBgScript } from "../../helper/sendMessageToBgScript";
 import AnswerContainer from "./components/AnswerContainer";
 import { sendMessageToContentScript } from "../../helper/sendMessageToContentScript";
 import { checkAnswerLocally } from "../../../background/helper/checkAnswerLocally";
+import Switch from "./components/Switch";
 
 const AskAI = () => {
   const [promptText, setPromptText] = useState("");
@@ -81,7 +82,10 @@ const AskAI = () => {
       ) : (
         <AnswerContainer ansText={answerText} />
       )}
-      <textarea onChange={handlePromptChange} />
+      <div className="prompt-text-wrapper">
+        <Switch label="scene identification" onToggle={() => {}} />
+        <textarea onChange={handlePromptChange} />
+      </div>
       <Button iconRight={<AskMeIconWhite />} onClick={generateAnswer}>
         {loading ? "Loading..." : "Generate"}
       </Button>

@@ -1,0 +1,54 @@
+// Switch.scss
+
+.switch-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #8c8c8c;
+}
+
+.switch-background {
+  width: 30px;
+  height: 15px;
+  background-color: #ddd;
+  border-radius: 8px;
+  position: relative;
+  margin-right: 5px;
+}
+
+.switch-handle {
+  width: 13px;
+  height: 13px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 1px;
+  transition: transform 0.3s;
+}
+
+.switch-on {
+  .switch-handle {
+    transform: translateX(16px);
+  }
+  .switch-background {
+    background-color: #4caf50; // Set background color to green when the switch is on
+  }
+}
+
+.switch-off {
+  .switch-handle {
+    transform: translateX(1px);
+  }
+}
+
+.label {
+  font-size: 12px;
+}
+
+.label-on {
+  color: #4caf50;
+}
+
+.label-off {
+  color: #f44336;
+}
