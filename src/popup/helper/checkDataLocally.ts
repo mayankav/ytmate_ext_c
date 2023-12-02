@@ -6,3 +6,11 @@ export function checkDataLocally(key: string, callback: Function) {
     if (tData && cData) callback(tData, cData);
   });
 }
+
+export function checkIsModelTrained(key: string, callback: Function) {
+  console.log("checkIsModelTrained..");
+  chrome.storage.local.get(key, function (result) {
+    const isModelTrained = !!result[key]?.transcriptData;
+    callback(isModelTrained);
+  });
+}
