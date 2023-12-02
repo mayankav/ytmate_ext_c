@@ -1,0 +1,14 @@
+@import "root_css";
+
+.searchbox {
+  border-radius: 24px;
+  padding: 10px 20px;
+  border: 2px solid $color-primary;
+  width: 100%;
+  font-size: $font-size-s;
+  line-height: 20px;
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}
