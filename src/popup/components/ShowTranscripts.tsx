@@ -52,6 +52,7 @@ const ShowTranscript = ({
   }, [transcriptData]);
 
   const isActive = (owntimestamp: number, nextTimeStamp: number) => {
+    if (stopScroll) return false;
     if (currentPlayingTimestamp === undefined) {
       return false;
     }
@@ -83,11 +84,11 @@ const ShowTranscript = ({
 
   return (
     <div className="transcript-wrapper">
-      {stopScroll && (
+      {/* {stopScroll && (
         <Button className="sync-button" onClick={syncButtonClickHandler}>
           Sync
         </Button>
-      )}
+      )} */}
       {transcriptData.map((record, i) => {
         const owntimestamp = record.timestamp;
         const nextTimeStamp = transcriptData[i + 1];

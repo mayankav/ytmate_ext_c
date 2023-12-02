@@ -18,6 +18,7 @@ import { DownloadIcon } from "../icons";
 import { sendMessageToBgScript } from "../helper/sendMessageToBgScript";
 import EmptyTranscriptScreen from "./EmptyTranscriptScreen";
 import { convertTimeToMMSS } from "../helper/timeConverter";
+import SearchBox from "./Searchbox";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -34,6 +35,9 @@ const Popup = () => {
   const [currentTabId, setCurrentTabId] = useState<number>();
   const [loading, setLoading] = useState(false);
   const [stopScroll, setStopScroll] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [filteredTranscriptData, setFilteredTranscriptData] =
+    useState<TranscriptRecord[]>();
 
   const getDataHandler = () => {
     console.log("getDataHandler");
@@ -220,6 +224,25 @@ const Popup = () => {
     document.body.removeChild(element);
   };
 
+  const toggleSearchBox = () => {
+    setSearchOpen(false);
+    setFilteredTranscriptData(undefined);
+    setStopScroll(false);
+  };
+
+  const onSearchTextChangeHandler = (searchText: string) => {
+    if (!transcriptData.length) return;
+    if (searchText) {
+      setStopScroll(true);
+    } else {
+      setStopScroll(false);
+    }
+    const filteredData = transcriptData.filter((record) =>
+      record.subtitle.includes(searchText)
+    );
+    setFilteredTranscriptData(filteredData);
+  };
+
   return (
     <div className="transcript-container">
       {!hasCC && <span>Video does not have subtitles</span>}
@@ -232,7 +255,7 @@ const Popup = () => {
           <ShowTranscripts
             stopScroll={stopScroll}
             syncButtonClickHandler={syncButtonClickHandler}
-            transcriptData={transcriptData}
+            transcriptData={filteredTranscriptData || transcriptData}
             currentPlayingTimestamp={currentTS}
             handleBookMarkSave={handleBookMarkSave}
           />
@@ -240,13 +263,26 @@ const Popup = () => {
       )}
       <footer>
         <div className="transcript-footer">
-          <Button fullWidth onClick={onDownloadTranscriptHandler}>
-            <span>Download</span>
-            <DownloadIcon />
-          </Button>
-          <Button variant="secondary" fullWidth>
-            Search
-          </Button>
+          {searchOpen ? (
+            <SearchBox
+              toggleSearchBox={toggleSearchBox}
+              onSearchTextChange={onSearchTextChangeHandler}
+            />
+          ) : (
+            <>
+              <Button fullWidth onClick={onDownloadTranscriptHandler}>
+                <span>Download</span>
+                <DownloadIcon />
+              </Button>
+              <Button
+                variant="secondary"
+                fullWidth
+                onClick={() => setSearchOpen(true)}
+              >
+                Search
+              </Button>
+            </>
+          )}
         </div>
       </footer>
     </div>
