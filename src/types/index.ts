@@ -1,5 +1,3 @@
-import { TranscriptRecord } from "../popup/components/Transcript";
-
 export enum MessageTypeEnum {
   GET_UNIQUE_VIDEO_ID = "GET_UNIQUE_VIDEO_ID",
   HAS_SUBTITLES = "HAS_SUBTITLES",
@@ -27,4 +25,9 @@ export type MessageReponse = {
   hasSubtitles?: boolean;
   tData?: Array<TranscriptRecord>;
   cData?: Array<any>;
+};
+
+export type TranscriptRecord = {
+  subtitle: string;
+  timestamp: number;
 };

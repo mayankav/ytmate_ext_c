@@ -3,9 +3,10 @@ import { getUniqueVideoId } from "./helper/getUniqueVideoId";
 import { hasSubtitles } from "./helper/hasSubtitles";
 import { changeVideoTime } from "./helper/changeVideoTime";
 import { callFisher } from "./helper/callFisher";
-import { saveDataLocally } from "../popup/helper/saveDataLocally";
+import { saveDataLocally } from "./helper/saveDataLocally";
 
 export {};
+
 window.onload = (event: Event) => {
   console.log("The webpage is fully loaded");
   var player = document.querySelector("video");
@@ -69,7 +70,7 @@ chrome.runtime.onMessage.addListener(
           if (tData && cData) {
             saveDataLocally(vId, tData, cData);
           }
-          // if popup is closed response wont go, when popup repoens,
+          // if popup is closed response wont go, when popup reopens,
           // it should check saved data locally first
           sendResponse({
             tData: tData,

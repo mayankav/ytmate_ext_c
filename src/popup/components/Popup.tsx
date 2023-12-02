@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { sendMessageToContentScript } from "../helper/sendMessageToContentScript";
 import { checkS3Bucket } from "../helper/checkS3Bucket";
-import { Message, MessageTypeEnum } from "../../types";
-import Transcript, { TranscriptRecord } from "./Transcript";
+import { Message, MessageTypeEnum, TranscriptRecord } from "../../types";
+import Transcript from "./Transcript";
 import { saveDataLocally } from "../helper/saveDataLocally";
-import { checkDataLocally } from "../helper/checkDataLocally";
+import {
+  checkDataLocally,
+  checkIsModelTrained,
+} from "../helper/checkDataLocally";
 import { handlePageIconChangeByStatus } from "../../background/helper";
 import { getTabId } from "../helper/getTabId";
+import { trainModel } from "../api/trainModel";
+import { saveTrainingStatusLocally } from "../helper/saveTrainingStatusLocally";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -69,7 +74,8 @@ const Popup = () => {
       messageType: MessageTypeEnum.HAS_SUBTITLES,
     };
     sendMessageToContentScript(ifVideoHasSubtitles, (response) => {
-      if (response.hasSubtitles) {
+      console.log("checking if video has subtitles..");
+      if (response?.hasSubtitles) {
         setHasCC(true);
       } else {
         setHasCC(false);
@@ -83,12 +89,14 @@ const Popup = () => {
       messageType: MessageTypeEnum.GET_UNIQUE_VIDEO_ID,
     };
     sendMessageToContentScript(detectVideoId, (response) => {
-      const videoId = response.uniqueVideoId;
-      checkDataLocally(videoId, (tData, cData) => {
-        if (tData) setTranscriptData(tData);
-        if (cData) setCommentsData(cData);
-      });
-      setCurrentVideoId(videoId);
+      const videoId = response?.uniqueVideoId;
+      if (videoId) {
+        checkDataLocally(videoId, (tData, cData) => {
+          if (tData) setTranscriptData(tData);
+          if (cData) setCommentsData(cData);
+        });
+        setCurrentVideoId(videoId);
+      }
     });
   }, []);
 
@@ -119,6 +127,40 @@ const Popup = () => {
     return () =>
       chrome.runtime.onMessage.removeListener(updateCurrentVideoTime);
   }, [transcriptData, currentVideoId]);
+
+  useEffect(() => {
+    if (currentVideoId) {
+      checkIsModelTrained(currentVideoId, (isModelTrained) => {
+        if (isModelTrained) {
+          console.log("model is already trained");
+        } else if (currentVideoId) {
+          console.log("Model is not trained...", "retrying..");
+          if (transcriptData.length > 0) {
+            trainModel(currentVideoId, "video")
+              .then((response) => {
+                console.log("Video Training Success:", response.status);
+                saveTrainingStatusLocally(currentVideoId, true);
+              })
+              .catch((error) => {
+                console.error("Video Training Error:", error);
+                saveTrainingStatusLocally(currentVideoId, false);
+              });
+          }
+          if (commentsData.length > 0) {
+            trainModel(currentVideoId, "comments")
+              .then((response) => {
+                console.log("Comments Training Success", response.status);
+                saveTrainingStatusLocally(currentVideoId, true);
+              })
+              .catch((error) => {
+                console.error("Comments Training Error:", error);
+                saveTrainingStatusLocally(currentVideoId, false);
+              });
+          }
+        }
+      });
+    }
+  }, [commentsData, transcriptData, currentVideoId]);
 
   return (
     <div

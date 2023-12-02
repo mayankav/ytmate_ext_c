@@ -1,16 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { sendMessageToContentScript } from "../helper/sendMessageToContentScript";
-import { Message, MessageTypeEnum } from "../../types";
+import { Message, MessageTypeEnum, TranscriptRecord } from "../../types";
 import { convertTimeToMMSS } from "../helper/timeConverter";
 import "./index.scss";
 interface TranscriptProps {
   transcriptData: Array<TranscriptRecord>;
   currentPlayingTimestamp?: number;
 }
-export type TranscriptRecord = {
-  subtitle: string;
-  timestamp: number;
-};
+
 const Transcript = ({
   transcriptData,
   currentPlayingTimestamp,
