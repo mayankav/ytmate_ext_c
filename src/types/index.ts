@@ -60,3 +60,11 @@ export type MessageToBgScript = {
 };
 
 export type MessageToBgScriptReponse = {} | void;
+
+export enum MessageToPopupTypeEnum {
+  STORAGE_UPDATE = "STORAGE_UPDATED",
+}
+export type MessageToPopup = {
+  messageType: MessageToPopupTypeEnum.STORAGE_UPDATE;
+  property: string;
+};

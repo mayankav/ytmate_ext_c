@@ -10,35 +10,32 @@ import CircleIcon from "../../../ui-components/CircleIcon";
 interface EmotionRowProps {
   description: string;
   percentage: number;
-  type: "positive" | "negative" | "neutral";
+  type: keyof Sentiments;
 }
 
 const EmotionRow = ({ type, percentage, description }: EmotionRowProps) => {
-  const getIcon = useCallback((type: "positive" | "negative" | "neutral") => {
+  const getIcon = useCallback((type: keyof Sentiments) => {
     switch (type) {
-      case "positive":
+      case "joy":
         return <HappySentimentIcon />;
-      case "neutral":
+      case "surprise":
         return <NeutralSentimentIcon />;
-      case "negative":
+      case "sadness":
         return <SadSentimentIcon />;
     }
   }, []);
 
-  const getGradient = useCallback(
-    (type: "positive" | "negative" | "neutral") => {
-      switch (type) {
-        case "positive":
-          return "linear-gradient(180deg, #FBFFFB 0%, #D8FFCA 100%)";
-        case "neutral":
-          return "linear-gradient(180deg, #FFFDFB 0%, #FFE2B7 100%)";
-        case "negative":
-          // red color is default gradient
-          return;
-      }
-    },
-    []
-  );
+  const getGradient = useCallback((type: keyof Sentiments) => {
+    switch (type) {
+      case "joy":
+        return "linear-gradient(180deg, #FBFFFB 0%, #D8FFCA 100%)";
+      case "surprise":
+        return "linear-gradient(180deg, #FFFDFB 0%, #FFE2B7 100%)";
+      case "sadness":
+        // red color is default gradient
+        return;
+    }
+  }, []);
 
   return (
     <div className="emotion_wrapper">
