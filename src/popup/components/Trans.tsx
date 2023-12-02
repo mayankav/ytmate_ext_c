@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import { sendMessageToContentScript } from "../helper/sendMessageToContentScript";
 import { checkS3Bucket } from "../helper/checkS3Bucket";
 import { Message, MessageTypeEnum, TranscriptRecord } from "../../types";
-import Transcript from "./Transcript";
+import ShowTranscripts from "./ShowTranscripts";
 import { saveDataLocally } from "../helper/saveDataLocally";
 import {
   checkDataLocally,
   checkIsModelTrained,
 } from "../helper/checkDataLocally";
-import { handlePageIconChangeByStatus } from "../../background/helper";
 import { getTabId } from "../helper/getTabId";
 import { trainModel } from "../api/trainModel";
 import { saveTrainingStatusLocally } from "../helper/saveTrainingStatusLocally";
+import { setTabBusy, checkIsTabBusy } from "../helper/setTabBusy";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -27,10 +27,11 @@ const Popup = () => {
   const [currentVideoId, setCurrentVideoId] = useState<string>();
   const [currentTabId, setCurrentTabId] = useState<number>();
   const [loading, setLoading] = useState(false);
+  const [stopScroll, setStopScroll] = useState(false);
 
   const getDataHandler = () => {
     console.log("getDataHandler");
-    setLoading(true);
+    setTabBusy(currentTabId, true);
     // check currentVideoId
     if (currentVideoId) {
       // check if s3 bucket has the data already (scraping done in past)
@@ -85,6 +86,10 @@ const Popup = () => {
   }, []);
 
   useEffect(() => {
+    // get the tab id
+    getTabId((tabId) => {
+      setCurrentTabId(tabId);
+    });
     // get the video id
     const detectVideoId: Message = {
       messageType: MessageTypeEnum.GET_UNIQUE_VIDEO_ID,
@@ -102,11 +107,18 @@ const Popup = () => {
   }, []);
 
   useEffect(() => {
-    getTabId((tabId) => {
-      setCurrentTabId(tabId);
-      handlePageIconChangeByStatus(loading, tabId);
-    });
-  }, [loading]);
+    if (currentTabId) {
+      checkIsTabBusy(currentTabId, (isBusy) => {
+        setLoading(isBusy);
+      });
+    }
+  }, [currentTabId]);
+
+  useEffect(() => {
+    if (transcriptData.length > 0) {
+      setTabBusy(currentTabId, false);
+    }
+  }, [transcriptData]);
 
   useEffect(() => {
     if (transcriptData.length && currentVideoId) {
@@ -164,23 +176,38 @@ const Popup = () => {
     }
   }, [commentsData, transcriptData, currentVideoId]);
 
+  useEffect(() => {
+    const scrollContainer = document.querySelector(".scroll-wrapper");
+    scrollContainer?.addEventListener("scroll", (event) => {
+      console.log(event);
+      // setStopScroll(true);
+    });
+  }, []);
+
+  const syncButtonClickHandler = () => {
+    setStopScroll(false);
+  };
+
   return (
-    <div
-      style={{
-        width: "320px",
-      }}
-    >
-      {loading
-        ? "Loading...."
-        : hasCC &&
-          transcriptData.length < 1 && (
-            <button onClick={getDataHandler}>Get Data</button>
-          )}
-      {!hasCC && "This video does not have subtitles"}
-      <Transcript
-        transcriptData={transcriptData}
-        currentPlayingTimestamp={currentTS}
-      />
+    <div className="transcript-container">
+      <div className="scroll-wrapper">
+        {loading
+          ? "Loading...."
+          : hasCC &&
+            transcriptData.length < 1 && (
+              <button onClick={getDataHandler}>Get Data</button>
+            )}
+        {!hasCC && "This video does not have subtitles"}
+
+        {transcriptData.length !== 0 && (
+          <ShowTranscripts
+            stopScroll={stopScroll}
+            syncButtonClickHandler={syncButtonClickHandler}
+            transcriptData={transcriptData}
+            currentPlayingTimestamp={currentTS}
+          />
+        )}
+      </div>
     </div>
   );
 };

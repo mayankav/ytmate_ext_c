@@ -1,0 +1,10 @@
+.circle-container {
+  display: flex;
+  padding: 6px;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, #fffbfb 0%, #ffcaca 100%);
+  border-radius: 50%;
+  height: 32px;
+  width: 32px;
+}
