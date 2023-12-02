@@ -305,8 +305,46 @@ const SadSentimentIcon = () => {
   );
 };
 
+const AskMeIconBig = () => (
+  <svg
+    width="60"
+    height="60"
+    viewBox="0 0 60 60"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="60" height="60" rx="30" fill="url(#paint0_linear_48_237)" />
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M34.5 37.5688C34.5 39.7949 37.3873 40.6691 38.6221 38.8168L44.1679 30.4981C45.1648 29.0028 44.0929 27 42.2958 27H37.5V22.4312C37.5 20.2051 34.6127 19.3309 33.3779 21.1832L27.8321 29.5019C26.8352 30.9972 27.9071 33 29.7042 33H34.5V37.5688Z"
+      fill="#C81515"
+    />
+    <path
+      opacity="0.3"
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M16.5 21.75C16.5 20.5074 17.5074 19.5 18.75 19.5H26.25C27.4926 19.5 28.5 20.5074 28.5 21.75C28.5 22.9926 27.4926 24 26.25 24H18.75C17.5074 24 16.5 22.9926 16.5 21.75ZM16.5 39.75C16.5 38.5074 17.5074 37.5 18.75 37.5H26.25C27.4926 37.5 28.5 38.5074 28.5 39.75C28.5 40.9926 27.4926 42 26.25 42H18.75C17.5074 42 16.5 40.9926 16.5 39.75ZM15.75 28.5C14.5074 28.5 13.5 29.5074 13.5 30.75C13.5 31.9926 14.5074 33 15.75 33H21.75C22.9926 33 24 31.9926 24 30.75C24 29.5074 22.9926 28.5 21.75 28.5H15.75Z"
+      fill="#C81515"
+    />
+    <defs>
+      <linearGradient
+        id="paint0_linear_48_237"
+        x1="30"
+        y1="0"
+        x2="30"
+        y2="60"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#FFFBFB" />
+        <stop offset="1" stop-color="#FFCACA" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
 export {
   AskMeIcon,
+  AskMeIconBig,
   SentimentIcon,
   TranscriptIcon,
   DownloadIcon,

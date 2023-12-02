@@ -5,6 +5,7 @@ import CircleIcon from "./ui-components/CircleIcon";
 import Sentiments from "./Sentiments";
 import { POPUP_TABS } from "../types";
 import { AskMeIcon, SentimentIcon, TranscriptIcon } from "../icons";
+import AskAI from "./AskAI";
 
 const Popup = () => {
   const [activeTab, setActiveTab] = React.useState<POPUP_TABS>(
@@ -41,7 +42,7 @@ const Popup = () => {
       <section>
         {activeTab === POPUP_TABS.Transcript && <Trans />}
         {activeTab === POPUP_TABS.Sentiment && <Sentiments />}
-        {activeTab === POPUP_TABS.AI && <div>AI</div>}
+        {activeTab === POPUP_TABS.AI && <AskAI />}
       </section>
     </div>
   );
