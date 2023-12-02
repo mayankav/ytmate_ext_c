@@ -11,7 +11,7 @@ const EmptyAskAI = () => {
       </div>
       <div className="description-container">
         <h3>Ask AI?</h3>
-        <p>Instantly uncover video insights. Generate intelligent summaries</p>
+        <p>Generate intelligent summaries & uncover video insights.</p>
       </div>
     </div>
   );

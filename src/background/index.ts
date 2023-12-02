@@ -44,14 +44,25 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     case MessageToBgScriptTypeEnum.CALL_AN_API:
       const apiName = request.apiName;
       const source = request.source;
+      const question = request.question;
       getVideoIdFromBgScript((videoId) => {
-        callAnApi(apiName, videoId, source);
+        callAnApi({ apiName, vId: videoId, source, question });
       });
       break;
   }
 });
 
-function callAnApi(apiName: ApiNames, vId: string, source: ApiSource) {
+function callAnApi({
+  apiName,
+  vId,
+  source,
+  question,
+}: {
+  apiName: ApiNames;
+  vId: string;
+  source: ApiSource;
+  question?: string;
+}) {
   console.log("in call an api", apiName, vId, source);
   try {
     // Dynamically require the module based on apiName
@@ -59,7 +70,11 @@ function callAnApi(apiName: ApiNames, vId: string, source: ApiSource) {
     // Check if the function exists in the imported module
     if (apiModule && apiModule[apiName]) {
       // Call the function with the provided arguments
-      apiModule[apiName](vId, source);
+      if (apiName === "getAnswer") {
+        apiModule[apiName](vId, source, question);
+      } else {
+        apiModule[apiName](vId, source);
+      }
     } else {
       console.error(`Function ${apiName} not found in module.`);
     }

@@ -57,6 +57,7 @@ export type MessageToBgScript = {
   action: MessageToBgScriptTypeEnum.CALL_AN_API;
   apiName: ApiNames;
   source: ApiSource;
+  question?: string;
 };
 
 export type MessageToBgScriptReponse = {} | void;
