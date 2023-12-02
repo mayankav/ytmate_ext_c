@@ -107,6 +107,12 @@ footer {
   }
 }
 
+.transcript-footer {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+}
+
 .sync-button {
   position: absolute;
   z-index: 1;

@@ -8,6 +8,7 @@ interface ButtonProps
   > {
   variant?: "primary" | "secondary";
   fullWidth?: boolean;
+  iconRight?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -15,6 +16,7 @@ const Button = ({
   variant = "primary",
   fullWidth = false,
   children,
+  iconRight,
   className,
   ...args
 }: ButtonProps) => {
@@ -25,6 +27,7 @@ const Button = ({
   return (
     <button className={buttonClass} {...args}>
       {children}
+      {iconRight}
     </button>
   );
 };

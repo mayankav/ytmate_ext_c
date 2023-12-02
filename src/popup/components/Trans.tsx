@@ -12,6 +12,8 @@ import { getTabId } from "../helper/getTabId";
 import { trainModel } from "../api/trainModel";
 import { saveTrainingStatusLocally } from "../helper/saveTrainingStatusLocally";
 import { checkIsTabBusy } from "../helper/setTabBusy";
+import Button from "./ui-components/button";
+import { DownloadIcon } from "../icons";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -226,6 +228,17 @@ const Popup = () => {
           />
         )}
       </div>
+      <footer>
+        <div className="transcript-footer">
+          <Button fullWidth>
+            <span>Download</span>
+            <DownloadIcon />
+          </Button>
+          <Button variant="secondary" fullWidth>
+            Search
+          </Button>
+        </div>
+      </footer>
     </div>
   );
 };

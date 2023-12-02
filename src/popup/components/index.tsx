@@ -3,12 +3,8 @@ import "./index.scss";
 import Trans from "./Trans";
 import CircleIcon from "./ui-components/CircleIcon";
 import Sentiments from "./Sentiments";
+import { POPUP_TABS } from "../types";
 
-enum POPUP_TABS {
-  Transcript = "Transcript",
-  Sentiment = "Sentiment",
-  AI = "Ask Me?",
-}
 
 const Popup = () => {
   const [activeTab, setActiveTab] = React.useState<POPUP_TABS>(
@@ -23,7 +19,7 @@ const Popup = () => {
             className={activeTab === tab ? "popup-tab active" : "popup-tab"}
             onClick={() => setActiveTab(tab)}
           >
-            <CircleIcon />
+            <CircleIcon icon={tab} />
             {tab}
           </div>
         ))}
