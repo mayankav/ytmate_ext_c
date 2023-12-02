@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./index.scss";
-import { Message, MessageTypeEnum } from "../../types";
+import {
+  MessageToContentScript,
+  MessageToContentScriptTypeEnum,
+} from "../../types";
 import { sendMessageToContentScript } from "../helper/sendMessageToContentScript";
 import { convertTimeToMMSS } from "../helper/timeConverter";
 import { TranscriptRecord } from "../types";
@@ -37,8 +40,8 @@ const ShowTranscript = ({
   }, []);
 
   const timeClickHandler = (timestamp: number) => {
-    const changeVideoTime: Message = {
-      messageType: MessageTypeEnum.MOVE_VIDEO_TO_TIME,
+    const changeVideoTime: MessageToContentScript = {
+      messageType: MessageToContentScriptTypeEnum.MOVE_VIDEO_TO_TIME,
       timestampInSeconds: timestamp,
     };
     sendMessageToContentScript(changeVideoTime, () => {});

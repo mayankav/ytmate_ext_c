@@ -1,4 +1,8 @@
-import { Message, MessageReponse, MessageTypeEnum } from "../types";
+import {
+  MessageToContentScript,
+  MessageToContentScriptReponse,
+  MessageToContentScriptTypeEnum,
+} from "../types";
 import { getUniqueVideoId } from "./helper/getUniqueVideoId";
 import { hasSubtitles } from "./helper/hasSubtitles";
 import { changeVideoTime } from "./helper/changeVideoTime";
@@ -35,31 +39,31 @@ chrome.runtime.sendMessage("I am loading content script", (response) => {
 
 chrome.runtime.onMessage.addListener(
   (
-    msg: Message,
+    msg: MessageToContentScript,
     sender: chrome.runtime.MessageSender,
-    sendResponse: (response?: MessageReponse) => void
+    sendResponse: (response?: MessageToContentScriptReponse) => void
   ) => {
     // Listening to messages from popup
     // if (sender.origin) { /* Your code here */ }
     console.log("the sender is", sender);
     switch (msg.messageType) {
-      case MessageTypeEnum.GET_UNIQUE_VIDEO_ID:
+      case MessageToContentScriptTypeEnum.GET_UNIQUE_VIDEO_ID:
         const videoId = getUniqueVideoId();
         sendResponse({
           uniqueVideoId: videoId,
         });
         break;
-      case MessageTypeEnum.HAS_SUBTITLES:
+      case MessageToContentScriptTypeEnum.HAS_SUBTITLES:
         const hasCC = hasSubtitles();
         sendResponse({
           hasSubtitles: hasCC,
         });
         break;
-      case MessageTypeEnum.MOVE_VIDEO_TO_TIME:
+      case MessageToContentScriptTypeEnum.MOVE_VIDEO_TO_TIME:
         const newTimestamp = msg.timestampInSeconds;
         changeVideoTime(newTimestamp);
         break;
-      case MessageTypeEnum.CALL_FISHER:
+      case MessageToContentScriptTypeEnum.CALL_FISHER:
         const vId = msg.videoId;
         callFisher(vId).then((data) => {
           const tData = Object.entries(data.transcript.transcriptData).map(

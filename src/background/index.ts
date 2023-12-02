@@ -1,5 +1,8 @@
+import { getUniqueVideoId } from "../content/helper/getUniqueVideoId";
+import { MessageToBgScriptTypeEnum } from "../types";
 import { handlePageIconChangeByTab } from "./helper";
 import { getTabId } from "./helper/getTabId";
+import { getVideoIdFromBgScript } from "./helper/getVideoIdFromBgScript";
 import { setTabBusy } from "./helper/setTabBusy";
 
 // when you switch to some other tab
@@ -38,5 +41,29 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       // Send a message to the popup script with the current timestamp
       chrome.tabs.sendMessage(sender.tab.id, { timestamp });
       break;
+    case MessageToBgScriptTypeEnum.CALL_AN_API:
+      const apiName = request.apiName;
+      const source = request.source;
+      getVideoIdFromBgScript((videoId) => {
+        callAnApi(apiName, videoId, source);
+      });
+      break;
   }
 });
+
+function callAnApi(apiName: ApiNames, vId: string, source: ApiSource) {
+  console.log("in call an api", apiName, vId, source);
+  try {
+    // Dynamically require the module based on apiName
+    const apiModule = require(`./api/${apiName}`);
+    // Check if the function exists in the imported module
+    if (apiModule && apiModule[apiName]) {
+      // Call the function with the provided arguments
+      apiModule[apiName](vId, source);
+    } else {
+      console.error(`Function ${apiName} not found in module.`);
+    }
+  } catch (error) {
+    console.error(`Error importing module for ${apiName}:`, error);
+  }
+}

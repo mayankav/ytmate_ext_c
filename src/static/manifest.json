@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "manifest_version": 3,
   "description": "Enhance YouTube viewing experience",
-  "permissions": ["storage", "tabs", "declarativeContent"],
+  "permissions": ["activeTab", "storage", "tabs", "declarativeContent"],
   "host_permissions": ["https://*.youtube.com/*"],
   "icons": {
     "16": "icon16_active.png",
