@@ -17,6 +17,7 @@ import Button from "./ui-components/button";
 import { DownloadIcon } from "../icons";
 import { sendMessageToBgScript } from "../helper/sendMessageToBgScript";
 import EmptyTranscriptScreen from "./EmptyTranscriptScreen";
+import { convertTimeToMMSS } from "../helper/timeConverter";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -198,6 +199,27 @@ const Popup = () => {
     });
   };
 
+  const onDownloadTranscriptHandler = () => {
+    // download transcript from transcriptData
+    const fileName = "transcript.txt";
+    const text = transcriptData
+      .map(
+        (record) =>
+          `${convertTimeToMMSS(record.timestamp)} \t ${record.subtitle}`
+      )
+      .join("\n\n");
+    const element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+    );
+    element.setAttribute("download", fileName);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   return (
     <div className="transcript-container">
       {!hasCC && <span>Video does not have subtitles</span>}
@@ -218,7 +240,7 @@ const Popup = () => {
       )}
       <footer>
         <div className="transcript-footer">
-          <Button fullWidth>
+          <Button fullWidth onClick={onDownloadTranscriptHandler}>
             <span>Download</span>
             <DownloadIcon />
           </Button>
