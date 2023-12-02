@@ -32,9 +32,9 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          'style-loader', // Adds CSS to the DOM by injecting a `<style>` tag
-          'css-loader',   // Translates CSS into CommonJS
-          'sass-loader',  // Compiles Sass to CSS
+          "style-loader", // Adds CSS to the DOM by injecting a `<style>` tag
+          "css-loader", // Translates CSS into CommonJS
+          "sass-loader", // Compiles Sass to CSS
         ],
       },
       // {
@@ -59,6 +59,9 @@ module.exports = {
   ],
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
+    alias: {
+      root_css: path.resolve(__dirname, "src/popup/root"),
+    },
   },
   output: {
     filename: "[name].js",

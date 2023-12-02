@@ -1,20 +1,19 @@
 import React, { useEffect, useRef } from "react";
-import { sendMessageToContentScript } from "../helper/sendMessageToContentScript";
-import { Message, MessageTypeEnum } from "../../types";
-import { convertTimeToMMSS } from "../helper/timeConverter";
 import "./index.scss";
-interface TranscriptProps {
+import { Message, MessageTypeEnum } from "../../../../types";
+import { sendMessageToContentScript } from "../../../helper/sendMessageToContentScript";
+import { convertTimeToMMSS } from "../../../helper/timeConverter";
+import { TranscriptRecord } from "../../../types";
+
+interface ShowTranscriptProps {
   transcriptData: Array<TranscriptRecord>;
   currentPlayingTimestamp?: number;
 }
-export type TranscriptRecord = {
-  subtitle: string;
-  timestamp: number;
-};
-const Transcript = ({
+
+const ShowTranscript = ({
   transcriptData,
   currentPlayingTimestamp,
-}: TranscriptProps) => {
+}: ShowTranscriptProps) => {
   const activeDivRef = useRef<HTMLDivElement>(null);
   const timeClickHandler = (timestamp: number) => {
     const changeVideoTime: Message = {
@@ -54,7 +53,7 @@ const Transcript = ({
   }, [currentPlayingTimestamp]);
 
   return (
-    <div className="transcript-container">
+    <div className="transcript-wrapper">
       {transcriptData.map((record, i) => {
         const owntimestamp = record.timestamp;
         const nextTimeStamp = transcriptData[i + 1];
@@ -63,8 +62,8 @@ const Transcript = ({
             tabIndex={i}
             className={
               isActive(owntimestamp, nextTimeStamp?.timestamp)
-                ? "row active"
-                : "row inactive"
+                ? "transcript-row active"
+                : "transcript-row inactive"
             }
             ref={
               isActive(owntimestamp, nextTimeStamp?.timestamp)
@@ -74,14 +73,24 @@ const Transcript = ({
             onClick={() => timeClickHandler(record.timestamp)}
             key={record.timestamp}
           >
-            <div
-              style={{
-                color: "blue",
-              }}
-            >
+            <div className="transcript-timestamp">
               {convertTimeToMMSS(record.timestamp)}
             </div>
-            <div className="subtitle">{record.subtitle}</div>
+            <div className="transcript-subtitle">{record.subtitle}</div>
+            <div className="transcript-bookmark">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M11 3C9.927 3 8.67217 4.21642 8 5C7.32783 4.21642 6.073 3 5 3C3.10067 3 2 4.48145 2 6.36694C2 9.5 8 13 8 13C8 13 14 9.5 14 6.5C14 4.61451 12.8993 3 11 3Z"
+                  fill="#F5A3A3"
+                />
+              </svg>
+            </div>
           </div>
         );
       })}
@@ -89,4 +98,4 @@ const Transcript = ({
   );
 };
 
-export default Transcript;
+export default ShowTranscript;

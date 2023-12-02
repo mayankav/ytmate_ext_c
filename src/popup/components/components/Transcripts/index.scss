@@ -1,0 +1,60 @@
+@import "root_css";
+
+.transcript-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  & > .scroll-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    flex: 1 1 0;
+    overflow-y: auto;
+    width: 100%;
+  }
+}
+
+.transcript-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.transcript-row {
+  display: flex;
+  padding: 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  line-height: 16px;
+  font-size: $font-size-s;
+  font-weight: 400;
+  color: #bfbfbf;
+  &.active {
+    background-color: rgba($color-primary, 0.3);
+    color: black;
+    filter: grayscale(0%);
+  }
+  &.inactive {
+    background: white;
+    filter: grayscale(100%);
+  }
+  .transcript-timestamp {
+    color: $color-primary;
+    font-weight: 500;
+    line-height: 20px;
+  }
+  .transcript-subtitle {
+    flex: 1;
+  }
+}

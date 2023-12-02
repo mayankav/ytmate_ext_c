@@ -1,35 +1,49 @@
-.transcript-container {
+@import "root_css";
+
+.popup-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 32px;
   align-items: center;
-  overflow: auto;
+  height: 566px; // change for responsive values of popup
+  width: 376px; // chnage for responsive values of popup
+  overflow: hidden;
 }
 
-.row {
-  width: 100%;
+header {
   display: flex;
-  gap: 8px;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 12px;
-  transition: all 0.2s ease-in-out;
+  flex-direction: row;
+  border-bottom: 1px solid $border-light;
+  width: 100%;
+  justify-content: center;
 }
 
-.subtitle {
+section {
   flex: 1;
-  text-align: center;
+  width: 100%;
 }
 
-.active {
-  background: lightseagreen;
-  color: white;
-  transform: scale(1.1);
+footer {
+  padding: 12px 20px;
+  width: 100%;
 }
 
-.inactive {
-  background: white;
-  color: black;
-  transform: scale(1);
+.popup-tab {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 12px;
+  gap: 8px;
+  align-items: center;
+  font-size: $font-size-m;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid transparent;
+  user-select: none;
+  cursor: pointer;
+  color: $font-inactive;
+  filter: grayscale(100%);
+  &.active {
+    border-bottom: 2px solid $border-active;
+    color: black;
+    filter: grayscale(0%);
+  }
 }
