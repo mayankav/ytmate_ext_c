@@ -54,6 +54,62 @@ const SentimentIcon = () => {
   );
 };
 
+const SentimentIconBig = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="36"
+      height="36"
+      viewBox="0 0 18 18"
+      fill="none"
+    >
+      <rect
+        opacity="0.3"
+        x="1.5"
+        y="1.5"
+        width="15"
+        height="15"
+        rx="7.5"
+        fill="#C81515"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M4.62604 10.916C4.39628 10.5713 4.48941 10.1057 4.83405 9.87592C5.1787 9.64616 5.64435 9.73929 5.87412 10.0839C6.74189 11.3856 7.76583 12 9.00008 12C10.2343 12 11.2583 11.3856 12.126 10.0839C12.3558 9.73929 12.8215 9.64616 13.1661 9.87592C13.5108 10.1057 13.6039 10.5713 13.3741 10.916C12.2419 12.6143 10.7658 13.5 9.00008 13.5C7.23433 13.5 5.75827 12.6143 4.62604 10.916Z"
+        fill="#C81515"
+      />
+    </svg>
+  );
+};
+
+const SentimentIconWhite = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <rect
+        opacity="0.3"
+        x="1.33301"
+        y="1.33337"
+        width="13.3333"
+        height="13.3333"
+        rx="6.66667"
+        fill="white"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M4.11253 9.70329C3.90829 9.39693 3.99107 8.98302 4.29743 8.77879C4.60378 8.57455 5.01769 8.65733 5.22193 8.96369C5.99328 10.1207 6.90345 10.6668 8.00056 10.6668C9.09767 10.6668 10.0078 10.1207 10.7792 8.96369C10.9834 8.65733 11.3973 8.57455 11.7037 8.77879C12.01 8.98302 12.0928 9.39693 11.8886 9.70329C10.8822 11.2129 9.57011 12.0002 8.00056 12.0002C6.43101 12.0002 5.11895 11.2129 4.11253 9.70329Z"
+        fill="white"
+      />
+    </svg>
+  );
+};
+
 const TranscriptIcon = () => {
   return (
     <svg
@@ -205,4 +261,6 @@ export {
   HappySentimentIcon,
   NeutralSentimentIcon,
   SadSentimentIcon,
+  SentimentIconWhite,
+  SentimentIconBig,
 };
