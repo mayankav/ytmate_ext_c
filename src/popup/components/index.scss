@@ -58,16 +58,17 @@ footer {
 .transcript-container {
   display: flex;
   flex-direction: column;
-  height: 448px;
   align-items: center;
+  min-height: 312px;
   & > .scroll-wrapper {
-    padding: 40px 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 1 1 0;
     overflow-y: auto;
     width: 100%;
+    min-height: 380px;
   }
 }
 
