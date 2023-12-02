@@ -1,0 +1,20 @@
+@import "root_css";
+.askai-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 20px;
+  textarea {
+    resize: none;
+    width: 310px;
+    height: 86px;
+    padding: 10px 12px;
+    color: #8c8c8c;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e2e2;
+  }
+}
