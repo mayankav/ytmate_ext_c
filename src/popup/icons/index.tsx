@@ -80,4 +80,37 @@ const TranscriptIcon = () => {
   );
 };
 
-export { AskMeIcon, SentimentIcon, TranscriptIcon };
+const DownloadIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <rect
+        x="7.3335"
+        y="2"
+        width="1.33333"
+        height="9.33333"
+        rx="0.666667"
+        fill="white"
+      />
+      <path
+        d="M4.47157 6.1953C4.21122 5.93495 3.78911 5.93495 3.52876 6.1953C3.26841 6.45565 3.26841 6.87776 3.52876 7.13811L7.52876 11.1381C7.78114 11.3905 8.18754 11.3993 8.45065 11.1581L12.4506 7.49148C12.7221 7.24268 12.7404 6.82097 12.4916 6.54956C12.2428 6.27814 11.8211 6.25981 11.5497 6.5086L8.02021 9.74395L4.47157 6.1953Z"
+        fill="white"
+      />
+      <rect
+        x="2"
+        y="12.6666"
+        width="12"
+        height="1.33333"
+        rx="0.666667"
+        fill="white"
+      />
+    </svg>
+  );
+};
+
+export { AskMeIcon, SentimentIcon, TranscriptIcon, DownloadIcon };
