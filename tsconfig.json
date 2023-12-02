@@ -4,9 +4,10 @@
     "module": "ES6",
     "target": "ES6",
     "moduleResolution": "Node",
+    "diagnostics": true,
     "esModuleInterop": true,
-    "diagnostics": true
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
   "exclude": ["node_modules"]
 }

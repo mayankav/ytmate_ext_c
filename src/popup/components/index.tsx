@@ -2,6 +2,7 @@ import React from "react";
 import "./index.scss";
 import Trans from "./Trans";
 import CircleIcon from "./ui-components/CircleIcon";
+import Sentiments from "./Sentiments";
 
 enum POPUP_TABS {
   Transcript = "Transcript",
@@ -29,7 +30,7 @@ const Popup = () => {
       </header>
       <section>
         {activeTab === POPUP_TABS.Transcript && <Trans />}
-        {activeTab === POPUP_TABS.Sentiment && <div>Sentiment</div>}
+        {activeTab === POPUP_TABS.Sentiment && <Sentiments />}
         {activeTab === POPUP_TABS.AI && <div>AI</div>}
       </section>
     </div>
