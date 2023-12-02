@@ -11,7 +11,7 @@ import {
 import { getTabId } from "../helper/getTabId";
 import { trainModel } from "../api/trainModel";
 import { saveTrainingStatusLocally } from "../helper/saveTrainingStatusLocally";
-import { setTabBusy, checkIsTabBusy } from "../helper/setTabBusy";
+import { checkIsTabBusy } from "../helper/setTabBusy";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -31,7 +31,7 @@ const Popup = () => {
 
   const getDataHandler = () => {
     console.log("getDataHandler");
-    setTabBusy(currentTabId, true);
+    setLoading(true);
     // check currentVideoId
     if (currentVideoId) {
       // check if s3 bucket has the data already (scraping done in past)
@@ -113,12 +113,6 @@ const Popup = () => {
       });
     }
   }, [currentTabId]);
-
-  useEffect(() => {
-    if (transcriptData.length > 0) {
-      setTabBusy(currentTabId, false);
-    }
-  }, [transcriptData]);
 
   useEffect(() => {
     if (transcriptData.length && currentVideoId) {

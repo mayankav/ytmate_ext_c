@@ -1,4 +1,6 @@
 import { handlePageIconChangeByTab } from "./helper";
+import { getTabId } from "./helper/getTabId";
+import { setTabBusy } from "./helper/setTabBusy";
 
 // when you switch to some other tab
 chrome.tabs.onActivated.addListener((activeInfo) => {
@@ -14,14 +16,20 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   tabUrl && handlePageIconChangeByTab(tabUrl, tabId);
 });
 
-// Listen for messages from the content script
+// Listen for messages from the content-script or popup
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  // Update the popup with the current timestamp
-  // chrome.action.setPopup({
-  //   tabId: sender.tab.id,
-  //   popup: "popup.html",
-  // });
-
-  // Send a message to the popup script with the current timestamp
-  chrome.tabs.sendMessage(sender.tab.id, { timestamp: request.timestamp });
+  const { action } = request;
+  switch (action) {
+    case "setCurrentTabBusy":
+      getTabId((tabId) => {
+        setTabBusy(tabId, request.busy);
+      });
+      sendResponse(`setCurrentTabBusy - ${request.busy}`);
+      break;
+    case "updateCurrentTimestamp":
+      const timestamp = request.timestamp;
+      // Send a message to the popup script with the current timestamp
+      chrome.tabs.sendMessage(sender.tab.id, { timestamp });
+      break;
+  }
 });
