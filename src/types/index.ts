@@ -1,26 +1,26 @@
-export enum MessageTypeEnum {
+export enum MessageToContentScriptTypeEnum {
   GET_UNIQUE_VIDEO_ID = "GET_UNIQUE_VIDEO_ID",
   HAS_SUBTITLES = "HAS_SUBTITLES",
   MOVE_VIDEO_TO_TIME = "MOVE_VIDEO_TO_TIME",
   CALL_FISHER = "CALL_FISHER",
 }
 
-export type Message =
+export type MessageToContentScript =
   | {
       messageType:
-        | MessageTypeEnum.GET_UNIQUE_VIDEO_ID
-        | MessageTypeEnum.HAS_SUBTITLES;
+        | MessageToContentScriptTypeEnum.GET_UNIQUE_VIDEO_ID
+        | MessageToContentScriptTypeEnum.HAS_SUBTITLES;
     }
   | {
-      messageType: MessageTypeEnum.MOVE_VIDEO_TO_TIME;
+      messageType: MessageToContentScriptTypeEnum.MOVE_VIDEO_TO_TIME;
       timestampInSeconds: number;
     }
   | {
-      messageType: MessageTypeEnum.CALL_FISHER;
+      messageType: MessageToContentScriptTypeEnum.CALL_FISHER;
       videoId: string;
     };
 
-export type MessageReponse = {
+export type MessageToContentScriptReponse = {
   uniqueVideoId?: string;
   hasSubtitles?: boolean;
   tData?: Array<TranscriptRecord>;
@@ -31,3 +31,32 @@ export type TranscriptRecord = {
   subtitle: string;
   timestamp: number;
 };
+
+export enum MessageToBgScriptTypeEnum {
+  CALL_AN_API = "CALL_AN_API",
+}
+
+type AppState = "active" | "inactive" | "busy";
+type ApiNames = "getAnswer" | "getSentiments" | "getSummary" | "trainModel";
+type ApiSource = "video" | "comments" | "images" | "";
+
+export enum ApiNamesEnum {
+  getAnswer = "getAnswer",
+  getSentiments = "getSentiments",
+  getSummary = "getSummary",
+  trainModel = "trainModel",
+}
+
+export enum ApiSourceEnum {
+  video = "video",
+  comments = "comments",
+  images = "images",
+  none = "",
+}
+export type MessageToBgScript = {
+  action: MessageToBgScriptTypeEnum.CALL_AN_API;
+  apiName: ApiNames;
+  source: ApiSource;
+};
+
+export type MessageToBgScriptReponse = {} | void;

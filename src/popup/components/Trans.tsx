@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { sendMessageToContentScript } from "../helper/sendMessageToContentScript";
 import { checkS3Bucket } from "../helper/checkS3Bucket";
-import { Message, MessageTypeEnum, TranscriptRecord } from "../../types";
+import {
+  MessageToContentScript,
+  MessageToContentScriptTypeEnum,
+  TranscriptRecord,
+  MessageToBgScript,
+  MessageToBgScriptTypeEnum,
+} from "../../types";
 import ShowTranscripts from "./ShowTranscripts";
 import { saveDataLocally } from "../helper/saveDataLocally";
-import {
-  checkDataLocally,
-  checkIsModelTrained,
-} from "../helper/checkDataLocally";
+import { checkDataLocally } from "../helper/checkDataLocally";
 import { getTabId } from "../helper/getTabId";
-import { trainModel } from "../api/trainModel";
-import { saveTrainingStatusLocally } from "../helper/saveTrainingStatusLocally";
 import { checkIsTabBusy } from "../helper/setTabBusy";
 import Button from "./ui-components/button";
 import { DownloadIcon } from "../icons";
+import { sendMessageToBgScript } from "../helper/sendMessageToBgScript";
 import EmptyTranscriptScreen from "./EmptyTranscriptScreen";
 
 const Popup = () => {
@@ -42,8 +44,8 @@ const Popup = () => {
         if (!data) {
           // call fisher to scrape data
           console.log("need to call fisher now..");
-          const fisherRequest: Message = {
-            messageType: MessageTypeEnum.CALL_FISHER,
+          const fisherRequest: MessageToContentScript = {
+            messageType: MessageToContentScriptTypeEnum.CALL_FISHER,
             videoId: currentVideoId,
           };
           sendMessageToContentScript(fisherRequest, (response) => {
@@ -76,8 +78,8 @@ const Popup = () => {
   };
   useEffect(() => {
     // check if video has subtitles
-    const ifVideoHasSubtitles: Message = {
-      messageType: MessageTypeEnum.HAS_SUBTITLES,
+    const ifVideoHasSubtitles: MessageToContentScript = {
+      messageType: MessageToContentScriptTypeEnum.HAS_SUBTITLES,
     };
     sendMessageToContentScript(ifVideoHasSubtitles, (response) => {
       console.log("checking if video has subtitles..");
@@ -95,8 +97,8 @@ const Popup = () => {
       setCurrentTabId(tabId);
     });
     // get the video id
-    const detectVideoId: Message = {
-      messageType: MessageTypeEnum.GET_UNIQUE_VIDEO_ID,
+    const detectVideoId: MessageToContentScript = {
+      messageType: MessageToContentScriptTypeEnum.GET_UNIQUE_VIDEO_ID,
     };
     sendMessageToContentScript(detectVideoId, (response) => {
       const videoId = response?.uniqueVideoId;
@@ -153,37 +155,25 @@ const Popup = () => {
       chrome.runtime.onMessage.removeListener(updateCurrentVideoTime);
   }, [transcriptData, currentVideoId]);
 
+  // training the model through bg script
   useEffect(() => {
     if (currentVideoId) {
-      checkIsModelTrained(currentVideoId, (isModelTrained) => {
-        if (isModelTrained) {
-          console.log("model is already trained");
-        } else if (currentVideoId) {
-          console.log("Model is not trained...", "retrying..");
-          if (transcriptData.length > 0) {
-            trainModel(currentVideoId, "video")
-              .then((response) => {
-                console.log("Video Training Success:", response.status);
-                saveTrainingStatusLocally(currentVideoId, true);
-              })
-              .catch((error) => {
-                console.error("Video Training Error:", error);
-                saveTrainingStatusLocally(currentVideoId, false);
-              });
-          }
-          if (commentsData.length > 0) {
-            trainModel(currentVideoId, "comments")
-              .then((response) => {
-                console.log("Comments Training Success", response.status);
-                saveTrainingStatusLocally(currentVideoId, true);
-              })
-              .catch((error) => {
-                console.error("Comments Training Error:", error);
-                saveTrainingStatusLocally(currentVideoId, false);
-              });
-          }
-        }
-      });
+      if (commentsData.length > 0) {
+        const message: MessageToBgScript = {
+          action: MessageToBgScriptTypeEnum.CALL_AN_API,
+          apiName: "trainModel",
+          source: "comments",
+        };
+        sendMessageToBgScript(message, (res) => {});
+      }
+      if (transcriptData.length > 0) {
+        const message: MessageToBgScript = {
+          action: MessageToBgScriptTypeEnum.CALL_AN_API,
+          apiName: "trainModel",
+          source: "video",
+        };
+        sendMessageToBgScript(message, (res) => {});
+      }
     }
   }, [commentsData, transcriptData, currentVideoId]);
 

@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EmotionRow from "./components/EmotionRow";
 import "./index.scss";
 import Button from "../ui-components/button";
 import { AskMeIcon } from "../../icons";
 import EmptySentimentScreen from "./components/EmptySentimentScreen";
+import { sendMessageToBgScript } from "../../helper/sendMessageToBgScript";
+import {
+  ApiNamesEnum,
+  ApiSourceEnum,
+  MessageToBgScript,
+  MessageToBgScriptTypeEnum,
+} from "../../../types";
 
 const Sentiments = () => {
   // temporary state to toggle between empty and filled sentiment screen
@@ -11,6 +18,20 @@ const Sentiments = () => {
   const onAnalyseClickHandler = () => {
     setSentiments(!sentiments);
   };
+  const [sentimentsData, setSentimentsData] = useState<Sentiments>(null);
+  useEffect(() => {
+    const message: MessageToBgScript = {
+      action: MessageToBgScriptTypeEnum.CALL_AN_API,
+      apiName: ApiNamesEnum.getSentiments,
+      source: ApiSourceEnum.none,
+    };
+    sendMessageToBgScript(message, (response) => {
+      console.log("Sentiments component: response from bg script", response);
+      if (response.sentiments) {
+        setSentimentsData(response.sentiments);
+      }
+    });
+  });
   return sentiments ? (
     <>
       <div className="sentiments-wrapper">

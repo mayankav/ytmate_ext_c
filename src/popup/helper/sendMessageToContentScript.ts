@@ -1,8 +1,11 @@
-import { Message, MessageReponse } from "../../types";
+import {
+  MessageToContentScript,
+  MessageToContentScriptReponse,
+} from "../../types";
 
 export function sendMessageToContentScript(
-  message: Message,
-  onResponseCallback: (response: MessageReponse) => void
+  message: MessageToContentScript,
+  onResponseCallback: (response: MessageToContentScriptReponse) => void
 ) {
   const params = {
     active: true,
