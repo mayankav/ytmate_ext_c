@@ -23,7 +23,6 @@ function handlePageIconChangeByTab(tabUrl: string, tabId: number) {
   }
 }
 
-// pending - unused
 function handlePageIconChangeByStatus(busy: boolean, tabId: number) {
   if (busy) {
     setPageIcon("busy", tabId);

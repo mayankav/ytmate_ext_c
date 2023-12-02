@@ -25,6 +25,7 @@ const Popup = () => {
   };
   const [currentTS, setCurrentTS] = useState<number>();
   const [currentVideoId, setCurrentVideoId] = useState<string>();
+  const [currentTabId, setCurrentTabId] = useState<number>();
   const [loading, setLoading] = useState(false);
 
   const getDataHandler = () => {
@@ -102,6 +103,7 @@ const Popup = () => {
 
   useEffect(() => {
     getTabId((tabId) => {
+      setCurrentTabId(tabId);
       handlePageIconChangeByStatus(loading, tabId);
     });
   }, [loading]);
