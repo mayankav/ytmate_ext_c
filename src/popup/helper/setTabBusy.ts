@@ -1,4 +1,7 @@
+import { handlePageIconChangeByStatus } from "../../background/helper";
+
 export function setTabBusy(tabId: number, busy: boolean) {
+  handlePageIconChangeByStatus(busy, tabId);
   const status = {
     busy,
   };

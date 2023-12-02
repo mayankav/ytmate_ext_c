@@ -8,10 +8,10 @@ import {
   checkDataLocally,
   checkIsModelTrained,
 } from "../helper/checkDataLocally";
-import { handlePageIconChangeByStatus } from "../../background/helper";
 import { getTabId } from "../helper/getTabId";
 import { trainModel } from "../api/trainModel";
 import { saveTrainingStatusLocally } from "../helper/saveTrainingStatusLocally";
+import { setTabBusy, checkIsTabBusy } from "../helper/setTabBusy";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -30,7 +30,7 @@ const Popup = () => {
 
   const getDataHandler = () => {
     console.log("getDataHandler");
-    setLoading(true);
+    setTabBusy(currentTabId, true);
     // check currentVideoId
     if (currentVideoId) {
       // check if s3 bucket has the data already (scraping done in past)
@@ -85,6 +85,10 @@ const Popup = () => {
   }, []);
 
   useEffect(() => {
+    // get the tab id
+    getTabId((tabId) => {
+      setCurrentTabId(tabId);
+    });
     // get the video id
     const detectVideoId: Message = {
       messageType: MessageTypeEnum.GET_UNIQUE_VIDEO_ID,
@@ -102,11 +106,18 @@ const Popup = () => {
   }, []);
 
   useEffect(() => {
-    getTabId((tabId) => {
-      setCurrentTabId(tabId);
-      handlePageIconChangeByStatus(loading, tabId);
-    });
-  }, [loading]);
+    if (currentTabId) {
+      checkIsTabBusy(currentTabId, (isBusy) => {
+        setLoading(isBusy);
+      });
+    }
+  }, [currentTabId]);
+
+  useEffect(() => {
+    if (transcriptData.length > 0) {
+      setTabBusy(currentTabId, false);
+    }
+  }, [transcriptData]);
 
   useEffect(() => {
     if (transcriptData.length && currentVideoId) {
