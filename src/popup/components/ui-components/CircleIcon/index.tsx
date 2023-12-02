@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.scss";
 import { POPUP_TABS } from "../../../types";
-import { AskMeIcon, SentimentIcon, TranscriptIcon } from "./icons";
+import { AskMeIcon, SentimentIcon, TranscriptIcon } from "../../../icons";
 
 interface CircleIconProps {
   icon: POPUP_TABS;
