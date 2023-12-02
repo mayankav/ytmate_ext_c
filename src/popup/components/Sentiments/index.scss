@@ -1,6 +1,7 @@
 .sentiments-wrapper {
   padding: 40px 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 12px;
+  flex-wrap: wrap;
 }
