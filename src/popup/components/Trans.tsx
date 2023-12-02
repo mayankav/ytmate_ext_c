@@ -16,6 +16,7 @@ import { checkIsTabBusy } from "../helper/setTabBusy";
 import Button from "./ui-components/button";
 import { DownloadIcon } from "../icons";
 import { sendMessageToBgScript } from "../helper/sendMessageToBgScript";
+import EmptyTranscriptScreen from "./EmptyTranscriptScreen";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -199,16 +200,13 @@ const Popup = () => {
 
   return (
     <div className="transcript-container">
-      <div className="scroll-wrapper">
-        {loading
-          ? "Loading...."
-          : hasCC &&
-            transcriptData.length < 1 && (
-              <button onClick={getDataHandler}>Get Data</button>
-            )}
-        {!hasCC && "This video does not have subtitles"}
-
-        {transcriptData.length > 0 && (
+      {!hasCC && <span>Video does not have subtitles</span>}
+      {hasCC && transcriptData.length < 1 && (
+        <EmptyTranscriptScreen fetchTranscriptHandler={getDataHandler} />
+      )}
+      {loading && <span>Loading...</span>}
+      {transcriptData.length > 0 && (
+        <div className="scroll-wrapper">
           <ShowTranscripts
             stopScroll={stopScroll}
             syncButtonClickHandler={syncButtonClickHandler}
@@ -216,8 +214,8 @@ const Popup = () => {
             currentPlayingTimestamp={currentTS}
             handleBookMarkSave={handleBookMarkSave}
           />
-        )}
-      </div>
+        </div>
+      )}
       <footer>
         <div className="transcript-footer">
           <Button fullWidth>
