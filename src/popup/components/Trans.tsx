@@ -182,6 +182,15 @@ const Popup = () => {
     setStopScroll(false);
   };
 
+  const handleBookMarkSave = (timeStamp: number) => {
+    chrome.storage.local.set({
+      bookmark: {
+        timeStamp: timeStamp,
+        videoId: currentVideoId,
+      },
+    });
+  };
+
   return (
     <div className="transcript-container">
       <div className="scroll-wrapper">
@@ -199,6 +208,7 @@ const Popup = () => {
             syncButtonClickHandler={syncButtonClickHandler}
             transcriptData={transcriptData}
             currentPlayingTimestamp={currentTS}
+            handleBookMarkSave={handleBookMarkSave}
           />
         )}
       </div>
