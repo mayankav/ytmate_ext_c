@@ -1,18 +1,25 @@
 import React from "react";
 import "./index.scss";
-import { POPUP_TABS } from "../../../types";
-import { AskMeIcon, SentimentIcon, TranscriptIcon } from "../../../icons";
+
+const DEFAULT_GRADIENT = "linear-gradient(180deg, #fffbfb 0%, #ffcaca 100%)";
 
 interface CircleIconProps {
-  icon: POPUP_TABS;
+  icon: React.ReactNode;
+  colorGradient?: string;
 }
 
-const CircleIcon = ({ icon }: CircleIconProps) => {
+const CircleIcon = ({
+  icon,
+  colorGradient = DEFAULT_GRADIENT,
+}: CircleIconProps) => {
   return (
-    <div className="circle-container">
-      {icon === POPUP_TABS.Transcript && <TranscriptIcon />}
-      {icon === POPUP_TABS.Sentiment && <SentimentIcon />}
-      {icon === POPUP_TABS.AI && <AskMeIcon />}
+    <div
+      className="circle-container"
+      style={{
+        background: colorGradient,
+      }}
+    >
+      {icon}
     </div>
   );
 };

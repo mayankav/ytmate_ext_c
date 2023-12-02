@@ -41,6 +41,12 @@ footer {
   cursor: pointer;
   color: $font-inactive;
   filter: grayscale(100%);
+  &.icon-wrapper {
+    height: 60px;
+    width: 60px;
+    display: grid;
+    place-content: center;
+  }
   &.active {
     border-bottom: 2px solid $border-active;
     color: black;
