@@ -10,6 +10,7 @@ const Transcripts = () => {
   const [transcriptData, setTranscriptData] = useState<TranscriptRecord[]>([]);
   const [commentsData, setCommentsData] = useState([]);
   const [currentTS, setCurrentTS] = useState<number>();
+  const [stopScroll, setStopScroll] = useState(false);
   const [currentVideoId, setCurrentVideoId] = useState<string>();
 
   useEffect(() => {
@@ -34,6 +35,18 @@ const Transcripts = () => {
       chrome.runtime.onMessage.removeListener(updateCurrentVideoTime);
   }, [transcriptData, currentVideoId]);
 
+  useEffect(() => {
+    const scrollContainer = document.querySelector(".scroll-wrapper");
+    scrollContainer?.addEventListener("scroll", (event) => {
+      console.log(event);
+      // setStopScroll(true);
+    });
+  }, []);
+
+  const syncButtonClickHandler = () => {
+    setStopScroll(false);
+  };
+
   console.log("transcriptData", transcriptData);
   console.log("commentsData", commentsData);
   console.log("currentTS", currentTS);
@@ -51,6 +64,8 @@ const Transcripts = () => {
           />
         ) : (
           <ShowTranscript
+            stopScroll={stopScroll}
+            syncButtonClickHandler={syncButtonClickHandler}
             transcriptData={transcriptData}
             currentPlayingTimestamp={currentTS}
           />

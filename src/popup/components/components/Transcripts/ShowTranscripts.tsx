@@ -1,16 +1,21 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./index.scss";
 import { Message, MessageTypeEnum } from "../../../../types";
 import { sendMessageToContentScript } from "../../../helper/sendMessageToContentScript";
 import { convertTimeToMMSS } from "../../../helper/timeConverter";
 import { TranscriptRecord } from "../../../types";
+import Button from "../../ui-components/button";
 
 interface ShowTranscriptProps {
   transcriptData: Array<TranscriptRecord>;
+  stopScroll: boolean;
+  syncButtonClickHandler: () => void;
   currentPlayingTimestamp?: number;
 }
 
 const ShowTranscript = ({
+  stopScroll,
+  syncButtonClickHandler,
   transcriptData,
   currentPlayingTimestamp,
 }: ShowTranscriptProps) => {
@@ -33,7 +38,7 @@ const ShowTranscript = ({
     }
     if (currentPlayingTimestamp >= owntimestamp) {
       if (nextTimeStamp) {
-        if (currentPlayingTimestamp <= nextTimeStamp) {
+        if (currentPlayingTimestamp < nextTimeStamp) {
           return true;
         }
       } else {
@@ -44,16 +49,21 @@ const ShowTranscript = ({
   };
 
   useEffect(() => {
-    if (activeDivRef.current) {
+    if (activeDivRef.current && !stopScroll) {
       activeDivRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
-  }, [currentPlayingTimestamp]);
+  }, [currentPlayingTimestamp, stopScroll]);
 
   return (
     <div className="transcript-wrapper">
+      {stopScroll && (
+        <Button className="sync-button" onClick={syncButtonClickHandler}>
+          Sync
+        </Button>
+      )}
       {transcriptData.map((record, i) => {
         const owntimestamp = record.timestamp;
         const nextTimeStamp = transcriptData[i + 1];
