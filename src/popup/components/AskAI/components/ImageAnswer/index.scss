@@ -1,0 +1,11 @@
+.image-ans-wrapper {
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+  .image-time {
+    color: blue;
+  }
+  .image-answer {
+    color: #8c8c8c;
+  }
+}

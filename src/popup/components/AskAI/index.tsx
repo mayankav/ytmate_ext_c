@@ -18,12 +18,27 @@ import AnswerContainer from "./components/AnswerContainer";
 import { sendMessageToContentScript } from "../../helper/sendMessageToContentScript";
 import { checkAnswerLocally } from "../../../background/helper/checkAnswerLocally";
 import Switch from "./components/Switch";
+import ImageAnswer from "./components/ImageAnswer";
+
+interface ImageAns {
+  time: string;
+  Answer: string;
+}
 
 const AskAI = () => {
   const [promptText, setPromptText] = useState("");
   const [answerText, setAnswerText] = useState("");
   const [answerInImage, setAnswerInImage] = useState(false);
+  const [imageAnswer, setImageAnswer] = useState<Array<ImageAns>>(null);
   const [loading, setLoading] = useState(false);
+  const isJSON = (str: string) => {
+    try {
+      JSON.parse(str);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
   const generateAnswer = () => {
     const message: MessageToBgScript = {
       action: MessageToBgScriptTypeEnum.CALL_AN_API,
@@ -63,8 +78,13 @@ const AskAI = () => {
             console.log("Message received in popup: videoId", videoId);
             if (videoId) {
               checkAnswerLocally(videoId, (data) => {
-                console.log("checked ans locally 444..", promptText);
-                setAnswerText(data);
+                if (isJSON(data)) {
+                  setImageAnswer(JSON.parse(data));
+                  setAnswerText("");
+                } else {
+                  setAnswerText(data);
+                  setImageAnswer(null);
+                }
                 setPromptText("");
                 setLoading(false);
               });
@@ -77,13 +97,22 @@ const AskAI = () => {
 
   return (
     <div className="askai-wrapper">
-      {answerText.length < 1 ? (
-        <EmptyAskAI />
-      ) : (
+      {answerText.length > 1 ? (
         <AnswerContainer ansText={answerText} />
+      ) : imageAnswer ? (
+        imageAnswer.map((imga) => (
+          <ImageAnswer time={parseInt(imga.time)} answer={imga.Answer} />
+        ))
+      ) : (
+        <EmptyAskAI />
       )}
       <div className="prompt-text-wrapper">
-        <Switch label="scene identification" onToggle={() => {}} />
+        <Switch
+          label="scene identification"
+          onToggle={(val) => {
+            setAnswerInImage(val);
+          }}
+        />
         <textarea onChange={handlePromptChange} />
       </div>
       <Button iconRight={<AskMeIconWhite />} onClick={generateAnswer}>
