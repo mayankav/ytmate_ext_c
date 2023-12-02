@@ -1,7 +1,10 @@
-export function saveAnswerLocally(key: string, answer: string) {
-  const dataToSave = {
-    answer,
-  };
+export function saveAnswerLocally(
+  key: string,
+  dataToSave: {
+    question: string;
+    answer: string;
+  }
+) {
   chrome.storage.local.set(
     {
       [key]: dataToSave,

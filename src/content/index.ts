@@ -49,6 +49,7 @@ chrome.runtime.onMessage.addListener(
     switch (msg.messageType) {
       case MessageToContentScriptTypeEnum.GET_UNIQUE_VIDEO_ID:
         const videoId = getUniqueVideoId();
+        console.log("returning video id", videoId);
         sendResponse({
           uniqueVideoId: videoId,
         });

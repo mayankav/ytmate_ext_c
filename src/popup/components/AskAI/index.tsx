@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EmptyAskAI from "./components/EmptyAskAI";
 import Button from "../ui-components/button";
-import { AskMeIconWhite, AskMeIconBig } from "../../icons";
+import { AskMeIconWhite } from "../../icons";
 import "./index.scss";
 import {
   ApiNamesEnum,
@@ -10,6 +10,8 @@ import {
   MessageToBgScriptTypeEnum,
   MessageToContentScript,
   MessageToContentScriptTypeEnum,
+  MessageToPopup,
+  MessageToPopupTypeEnum,
 } from "../../../types";
 import { sendMessageToBgScript } from "../../helper/sendMessageToBgScript";
 import AnswerContainer from "./components/AnswerContainer";
@@ -30,7 +32,9 @@ const AskAI = () => {
     };
     if (promptText.length > 0) {
       setLoading(true);
-      sendMessageToBgScript(message, (response) => {});
+      sendMessageToBgScript(message, (response) => {
+        console.log("response arrived from bg script to askai", response);
+      });
     }
   };
   const handlePromptChange = (e) => {
@@ -38,28 +42,37 @@ const AskAI = () => {
   };
 
   useEffect(() => {
-    let interval;
-    if (answerText.length < 1 || loading) {
-      const message: MessageToContentScript = {
-        messageType: MessageToContentScriptTypeEnum.GET_UNIQUE_VIDEO_ID,
-      };
-      sendMessageToContentScript(message, (response) => {
-        const videoId = response.uniqueVideoId;
-        if (videoId) {
-          interval = setInterval(() => {
-            checkAnswerLocally(videoId, (data) => {
-              console.log("checked ans locally..");
-              setAnswerText(data);
-              setLoading(false);
-            });
-          }, 500);
+    chrome.runtime.onMessage.addListener(
+      (message: MessageToPopup, sender, sendResponse) => {
+        // Handle the received message from the background script
+        console.log(
+          "Message received in popup:",
+          message.messageType,
+          message.property
+        );
+        if (
+          message.messageType === MessageToPopupTypeEnum.STORAGE_UPDATE &&
+          message.property === "answer"
+        ) {
+          const message: MessageToContentScript = {
+            messageType: MessageToContentScriptTypeEnum.GET_UNIQUE_VIDEO_ID,
+          };
+          sendMessageToContentScript(message, (response) => {
+            const videoId = response.uniqueVideoId;
+            console.log("Message received in popup: videoId", videoId);
+            if (videoId) {
+              checkAnswerLocally(videoId, (data) => {
+                console.log("checked ans locally 444..", promptText);
+                setAnswerText(data);
+                setPromptText("");
+                setLoading(false);
+              });
+            }
+          });
         }
-      });
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [answerText]);
+      }
+    );
+  }, []);
 
   return (
     <div className="askai-wrapper">

@@ -5,8 +5,7 @@ export function sendMessageToBgScript(
   onResponseCallback: (response) => void
 ) {
   // Send the message to the background script
-  chrome.runtime.sendMessage(message, (response) => {
-    onResponseCallback(response);
-    console.log("Response from background script:", response);
+  chrome.runtime.sendMessage(message, (res) => {
+    console.log("intercept here", res);
   });
 }

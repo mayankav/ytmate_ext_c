@@ -22,6 +22,15 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   const { action } = request;
   switch (action) {
+    case MessageToBgScriptTypeEnum.CALL_AN_API:
+      const apiName = request.apiName;
+      const source = request.source;
+      const question = request.question;
+      getVideoIdFromBgScript((videoId) => {
+        // sendResponse cannot be called here
+        callAnApi({ apiName, vId: videoId, source, question });
+      });
+      break;
     case "setCurrentTabBusy":
       getTabId((tabId) => {
         setTabBusy(tabId, request.busy);
@@ -39,14 +48,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       });
       // Send a message to the popup script with the current timestamp
       chrome.tabs.sendMessage(sender.tab.id, { timestamp });
-      break;
-    case MessageToBgScriptTypeEnum.CALL_AN_API:
-      const apiName = request.apiName;
-      const source = request.source;
-      const question = request.question;
-      getVideoIdFromBgScript((videoId) => {
-        callAnApi({ apiName, vId: videoId, source, question });
-      });
       break;
   }
 });
