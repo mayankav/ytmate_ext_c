@@ -5,7 +5,7 @@ import {
   NeutralSentimentIcon,
   SadSentimentIcon,
 } from "../../../../icons";
-import CircleIcon from "../../../ui-components/CircleIcon";
+import { SENTIMENT_ICONS } from "./constants";
 
 interface EmotionRowProps {
   description: string;
@@ -14,33 +14,27 @@ interface EmotionRowProps {
 }
 
 const EmotionRow = ({ type, percentage, description }: EmotionRowProps) => {
-  const getIcon = useCallback((type: keyof Sentiments) => {
+  const getImage = useCallback((type: keyof Sentiments) => {
     switch (type) {
       case "joy":
-        return <HappySentimentIcon />;
+        return SENTIMENT_ICONS.joy;
       case "surprise":
-        return <NeutralSentimentIcon />;
+        return SENTIMENT_ICONS.surprise;
       case "sadness":
-        return <SadSentimentIcon />;
-    }
-  }, []);
-
-  const getGradient = useCallback((type: keyof Sentiments) => {
-    switch (type) {
-      case "joy":
-        return "linear-gradient(180deg, #FBFFFB 0%, #D8FFCA 100%)";
-      case "surprise":
-        return "linear-gradient(180deg, #FFFDFB 0%, #FFE2B7 100%)";
-      case "sadness":
-        // red color is default gradient
-        return;
+        return SENTIMENT_ICONS.sadness;
+      case "anger":
+        return SENTIMENT_ICONS.anger;
+      case "fear":
+        return SENTIMENT_ICONS.fear;
+      case "love":
+        return SENTIMENT_ICONS.love;
     }
   }, []);
 
   return (
     <div className="emotion_wrapper">
       <div className="icon-wrapper">
-        <CircleIcon icon={getIcon(type)} colorGradient={getGradient(type)} />
+        <img src={getImage(type)} alt={type} height="100%" width="100%" />
       </div>
       <div className="emotion_wrapper-inner">
         <div className="percentage">{percentage}%</div>

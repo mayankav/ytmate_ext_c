@@ -3,12 +3,12 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
+  flex: 1;
   .icon-wrapper {
     height: 60px;
     width: 60px;
   }
   &-inner {
-    width: 216px;
     display: flex;
     flex-direction: column;
   }
