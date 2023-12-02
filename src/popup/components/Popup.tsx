@@ -7,6 +7,7 @@ import { saveDataLocally } from "../helper/saveDataLocally";
 import { checkDataLocally } from "../helper/checkDataLocally";
 import { handlePageIconChangeByStatus } from "../../background/helper";
 import { getTabId } from "../helper/getTabId";
+import { trainModel } from "../api/trainModel";
 
 const Popup = () => {
   const [transcriptData, setTranscriptData] = useState<Array<TranscriptRecord>>(
@@ -119,6 +120,18 @@ const Popup = () => {
     return () =>
       chrome.runtime.onMessage.removeListener(updateCurrentVideoTime);
   }, [transcriptData, currentVideoId]);
+
+  useEffect(() => {
+    if (transcriptData.length > 0) {
+      trainModel(currentVideoId, "transcript");
+    }
+  }, [transcriptData, currentVideoId]);
+
+  useEffect(() => {
+    if (commentsData.length > 0) {
+      trainModel(currentVideoId, "comments");
+    }
+  }, [commentsData, currentVideoId]);
 
   return (
     <div
