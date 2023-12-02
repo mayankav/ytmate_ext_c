@@ -113,4 +113,96 @@ const DownloadIcon = () => {
   );
 };
 
-export { AskMeIcon, SentimentIcon, TranscriptIcon, DownloadIcon };
+const HappySentimentIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      fill="none"
+    >
+      <rect
+        opacity="0.3"
+        x="3"
+        y="3"
+        width="30"
+        height="30"
+        rx="15"
+        fill="#359012"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M9.25208 21.8322C8.79256 21.1429 8.97882 20.2116 9.66811 19.7521C10.3574 19.2926 11.2887 19.4788 11.7482 20.1681C13.4838 22.7714 15.5317 24.0002 18.0002 24.0002C20.4687 24.0002 22.5165 22.7714 24.2521 20.1681C24.7116 19.4788 25.6429 19.2926 26.3322 19.7521C27.0215 20.2116 27.2078 21.1429 26.7482 21.8322C24.4838 25.2289 21.5317 27.0002 18.0002 27.0002C14.4687 27.0002 11.5165 25.2289 9.25208 21.8322Z"
+        fill="#359012"
+      />
+    </svg>
+  );
+};
+
+const NeutralSentimentIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      fill="none"
+    >
+      <rect
+        opacity="0.3"
+        x="3"
+        y="3"
+        width="30"
+        height="30"
+        rx="15"
+        fill="#FFA235"
+      />
+      <path
+        d="M11 23H25"
+        stroke="#FF9416"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+    </svg>
+  );
+};
+
+const SadSentimentIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      fill="none"
+    >
+      <rect
+        opacity="0.3"
+        x="3"
+        y="3"
+        width="30"
+        height="30"
+        rx="15"
+        fill="#C81515"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M9.25208 24.6678C8.79256 25.3571 8.97882 26.2884 9.66811 26.7479C10.3574 27.2074 11.2887 27.0212 11.7482 26.3319C13.4838 23.7286 15.5317 22.4998 18.0002 22.4998C20.4687 22.4998 22.5165 23.7286 24.2521 26.3319C24.7116 27.0212 25.6429 27.2074 26.3322 26.7479C27.0215 26.2884 27.2078 25.3571 26.7482 24.6678C24.4838 21.2711 21.5317 19.4998 18.0002 19.4998C14.4687 19.4998 11.5165 21.2711 9.25208 24.6678Z"
+        fill="#C81515"
+      />
+    </svg>
+  );
+};
+
+export {
+  AskMeIcon,
+  SentimentIcon,
+  TranscriptIcon,
+  DownloadIcon,
+  HappySentimentIcon,
+  NeutralSentimentIcon,
+  SadSentimentIcon,
+};
