@@ -112,3 +112,10 @@ footer {
   z-index: 1;
   bottom: 10px;
 }
+
+.bookmark-svg {
+  transition: transform 0.2s ease-in-out;
+  &:active {
+    transform: scale(2);
+  }
+}

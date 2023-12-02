@@ -10,16 +10,32 @@ interface ShowTranscriptProps {
   transcriptData: Array<TranscriptRecord>;
   stopScroll: boolean;
   syncButtonClickHandler: () => void;
+  handleBookMarkSave: (timestamp: number) => void;
   currentPlayingTimestamp?: number;
 }
 
 const ShowTranscript = ({
   stopScroll,
   syncButtonClickHandler,
+  handleBookMarkSave,
   transcriptData,
   currentPlayingTimestamp,
 }: ShowTranscriptProps) => {
   const activeDivRef = useRef<HTMLDivElement>(null);
+  const [bookmark, setBookmark] = useState<number>();
+
+  useEffect(() => {
+    chrome.storage.local.get(["bookmark"], function (result) {
+      if (result?.bookmark) {
+        const bookmarkedTimestamp = result.bookmark?.timeStamp;
+        if (bookmarkedTimestamp !== undefined) {
+          setBookmark(bookmarkedTimestamp);
+          timeClickHandler(bookmarkedTimestamp);
+        }
+      }
+    });
+  }, []);
+
   const timeClickHandler = (timestamp: number) => {
     const changeVideoTime: Message = {
       messageType: MessageTypeEnum.MOVE_VIDEO_TO_TIME,
@@ -33,7 +49,7 @@ const ShowTranscript = ({
   }, [transcriptData]);
 
   const isActive = (owntimestamp: number, nextTimeStamp: number) => {
-    if (!currentPlayingTimestamp) {
+    if (currentPlayingTimestamp === undefined) {
       return false;
     }
     if (currentPlayingTimestamp >= owntimestamp) {
@@ -56,6 +72,11 @@ const ShowTranscript = ({
       });
     }
   }, [currentPlayingTimestamp, stopScroll]);
+
+  const onBookMarkClickHandler = (timestamp: number) => {
+    handleBookMarkSave(timestamp);
+    setBookmark(timestamp);
+  };
 
   return (
     <div className="transcript-wrapper">
@@ -87,8 +108,16 @@ const ShowTranscript = ({
               {convertTimeToMMSS(record.timestamp)}
             </div>
             <div className="transcript-subtitle">{record.subtitle}</div>
-            <div className="transcript-bookmark">
+            <div
+              className="transcript-bookmark"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onBookMarkClickHandler(record.timestamp);
+              }}
+            >
               <svg
+                className="bookmark-svg"
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -97,7 +126,10 @@ const ShowTranscript = ({
               >
                 <path
                   d="M11 3C9.927 3 8.67217 4.21642 8 5C7.32783 4.21642 6.073 3 5 3C3.10067 3 2 4.48145 2 6.36694C2 9.5 8 13 8 13C8 13 14 9.5 14 6.5C14 4.61451 12.8993 3 11 3Z"
-                  fill="#F5A3A3"
+                  fill={
+                    record.timestamp === bookmark ? "#c81515" : "transparent"
+                  }
+                  stroke="#c81515"
                 />
               </svg>
             </div>
