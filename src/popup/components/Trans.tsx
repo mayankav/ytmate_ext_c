@@ -107,11 +107,17 @@ const Popup = () => {
   }, []);
 
   useEffect(() => {
+    let interval;
     if (currentTabId) {
-      checkIsTabBusy(currentTabId, (isBusy) => {
-        setLoading(isBusy);
-      });
+      interval = setInterval(() => {
+        checkIsTabBusy(currentTabId, (isBusy) => {
+          setLoading(isBusy);
+        });
+      }, 300);
     }
+    () => {
+      clearInterval(interval);
+    };
   }, [currentTabId]);
 
   useEffect(() => {
