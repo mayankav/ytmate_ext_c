@@ -1,11 +1,12 @@
 .scroll-panel {
   overflow: auto;
-  height: 450px;
+  min-height: 200px;
+  max-height: 380px;
   .sentiments-wrapper {
-    padding: 40px 20px;
+    padding: 20px;
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: 12px 8px;
     flex-wrap: wrap;
   }
 }

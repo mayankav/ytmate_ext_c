@@ -120,7 +120,7 @@ const AskAI = () => {
         <textarea onChange={handlePromptChange} />
       </div>
       <Button iconRight={<AskMeIconWhite />} onClick={generateAnswer}>
-        {loading ? "Loading..." : "Generate"}
+        {loading ? "Searching..." : "Generate"}
       </Button>
     </div>
   );
