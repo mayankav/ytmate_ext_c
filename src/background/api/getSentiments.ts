@@ -1,7 +1,7 @@
 import { MessageToPopupTypeEnum } from "../../types";
 import { checkIsModelTrained } from "../helper/checkIsModelTrained";
 import { saveSentimentsLocally } from "../helper/saveSentimentsLocally";
-import { sendMesaageToPopup } from "../helper/sendMessageToPopup";
+import { sendMessageToPopup } from "../helper/sendMessageToPopup";
 import { API_BASE_URL } from "./constants";
 export function getSentiments(
   vId: string,
@@ -37,7 +37,7 @@ export function getSentiments(
             messageType: MessageToPopupTypeEnum.STORAGE_UPDATE,
             property: "sentiments",
           };
-          sendMesaageToPopup(messageToPopup, () => {});
+          sendMessageToPopup(messageToPopup, () => {});
         })
         .catch((error) => {
           console.error("Getting Sentiments Error:", error);

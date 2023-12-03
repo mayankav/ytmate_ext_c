@@ -1,6 +1,6 @@
 import { MessageToPopupTypeEnum } from "../../types";
 import { saveSummaryLocally } from "../helper/saveSummaryLocally";
-import { sendMesaageToPopup } from "../helper/sendMessageToPopup";
+import { sendMessageToPopup } from "../helper/sendMessageToPopup";
 import { API_BASE_URL } from "./constants";
 export function getSummary(vId: string, source: "video" | "comments") {
   const endpoint = "CreateSummary";
@@ -36,7 +36,7 @@ export function getSummary(vId: string, source: "video" | "comments") {
         messageType: MessageToPopupTypeEnum.STORAGE_UPDATE,
         property: "summary",
       };
-      sendMesaageToPopup(messageToPopup, () => {});
+      sendMessageToPopup(messageToPopup, () => {});
     })
     .catch((error) => {
       console.error("Getting Summary Error:", error);
