@@ -101,7 +101,11 @@ const AskAI = () => {
         <AnswerContainer ansText={answerText} />
       ) : imageAnswer ? (
         imageAnswer.map((imga) => (
-          <ImageAnswer time={parseInt(imga.time)} answer={imga.Answer} />
+          <ImageAnswer
+            key={imga.time}
+            time={parseInt(imga.time)}
+            answer={imga.Answer}
+          />
         ))
       ) : (
         <EmptyAskAI />
