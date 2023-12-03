@@ -99,6 +99,7 @@ const Sentiments = () => {
 
   return sentiments ? (
     <>
+
       <div className="scroll-panel">
         <div className="sentiments-wrapper">
           {sentimentsData &&
@@ -118,6 +119,7 @@ const Sentiments = () => {
         {commentsSummaryData && (
           <SummaryBox type="Comments" summaryText={commentsSummaryData} />
         )}
+
       </div>
 
       <footer>
