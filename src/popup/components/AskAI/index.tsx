@@ -100,13 +100,15 @@ const AskAI = () => {
       {answerText.length > 1 ? (
         <AnswerContainer ansText={answerText} />
       ) : imageAnswer ? (
-        imageAnswer.map((imga) => (
-          <ImageAnswer
-            key={imga.time}
-            time={parseInt(imga.time)}
-            answer={imga.Answer}
-          />
-        ))
+        imageAnswer
+          .sort((a, b) => parseInt(a.time) - parseInt(b.time))
+          .map((image) => (
+            <ImageAnswer
+              key={image.time}
+              time={parseInt(image.time)}
+              answer={image.Answer}
+            />
+          ))
       ) : (
         <EmptyAskAI />
       )}
@@ -117,7 +119,7 @@ const AskAI = () => {
             setAnswerInImage(val);
           }}
         />
-        <textarea onChange={handlePromptChange} />
+        <textarea onChange={handlePromptChange} style={{ outline: "none" }} />
       </div>
       <Button iconRight={<AskMeIconWhite />} onClick={generateAnswer}>
         {loading ? "Searching..." : "Generate"}
