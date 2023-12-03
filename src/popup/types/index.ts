@@ -5,6 +5,6 @@ export type TranscriptRecord = {
 
 export enum POPUP_TABS {
   Transcript = "Transcript",
-  Sentiment = "Sentiment",
+  Sentiment = "Insights",
   AI = "Ask Me?",
 }

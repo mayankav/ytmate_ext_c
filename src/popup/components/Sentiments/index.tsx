@@ -13,6 +13,8 @@ import {
   MessageToBgScriptTypeEnum,
   MessageToContentScript,
   MessageToContentScriptTypeEnum,
+  MessageToPopup,
+  MessageToPopupTypeEnum,
 } from "../../../types";
 import { checkSentimentsLocally } from "../../../background/helper/checkSentimentsLocally";
 
@@ -31,26 +33,35 @@ const Sentiments = () => {
   };
 
   useEffect(() => {
-    let interval;
-    if (sentimentsData === null) {
-      const message: MessageToContentScript = {
-        messageType: MessageToContentScriptTypeEnum.GET_UNIQUE_VIDEO_ID,
-      };
-      sendMessageToContentScript(message, (response) => {
-        const videoId = response.uniqueVideoId;
-        if (videoId) {
-          interval = setInterval(() => {
-            checkSentimentsLocally(videoId, (data) => {
-              setSentimentsData(data);
-            });
-          }, 500);
+    chrome.runtime.onMessage.addListener(
+      (message: MessageToPopup, sender, sendResponse) => {
+        // Handle the received message from the background script
+        console.log(
+          "Message received in popup:",
+          message.messageType,
+          message.property
+        );
+        if (message.messageType === MessageToPopupTypeEnum.STORAGE_UPDATE) {
+          const property = message.property;
+          const msg: MessageToContentScript = {
+            messageType: MessageToContentScriptTypeEnum.GET_UNIQUE_VIDEO_ID,
+          };
+          sendMessageToContentScript(msg, (response) => {
+            const videoId = response.uniqueVideoId;
+            console.log("Message received in popup: videoId", videoId);
+            if (videoId) {
+              if (property === "sentiments") {
+                checkSentimentsLocally(videoId, (data) => {
+                  console.log("PROPS IS sentiments", data);
+                  setSentimentsData(data);
+                });
+              }
+            }
+          });
         }
-      });
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [sentimentsData]);
+      }
+    );
+  }, []);
 
   return sentiments ? (
     <>
@@ -65,8 +76,13 @@ const Sentiments = () => {
           ))}
       </div>
       <footer>
-        <Button variant="secondary" fullWidth iconRight={<AskMeIcon />}>
-          Know more with AI?
+        <Button
+          variant="secondary"
+          fullWidth
+          iconRight={<AskMeIcon />}
+          onClick={() => {}}
+        >
+          Try more with AI
         </Button>
       </footer>
     </>
