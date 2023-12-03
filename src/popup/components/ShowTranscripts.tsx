@@ -15,6 +15,7 @@ interface ShowTranscriptProps {
   syncButtonClickHandler: () => void;
   handleBookMarkSave: (timestamp: number) => void;
   currentPlayingTimestamp?: number;
+  currentVideoId?: string;
 }
 
 const ShowTranscript = ({
@@ -23,6 +24,7 @@ const ShowTranscript = ({
   handleBookMarkSave,
   transcriptData,
   currentPlayingTimestamp,
+  currentVideoId,
 }: ShowTranscriptProps) => {
   const activeDivRef = useRef<HTMLDivElement>(null);
   const [bookmark, setBookmark] = useState<number>();
@@ -30,6 +32,8 @@ const ShowTranscript = ({
   useEffect(() => {
     chrome.storage.local.get(["bookmark"], function (result) {
       if (result?.bookmark) {
+        const bookmarkedVideoId = result.bookmark?.videoId;
+        if (bookmarkedVideoId !== currentVideoId) return;
         const bookmarkedTimestamp = result.bookmark?.timeStamp;
         if (bookmarkedTimestamp !== undefined) {
           setBookmark(bookmarkedTimestamp);

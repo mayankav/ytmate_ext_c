@@ -212,6 +212,7 @@ const Popup = () => {
 
   const onDownloadTranscriptHandler = () => {
     // download transcript from transcriptData
+    if (!transcriptData.length) return;
     const fileName = "transcript.txt";
     const text = transcriptData
       .map(
@@ -267,6 +268,7 @@ const Popup = () => {
             transcriptData={filteredTranscriptData || transcriptData}
             currentPlayingTimestamp={currentTS}
             handleBookMarkSave={handleBookMarkSave}
+            currentVideoId={currentVideoId}
           />
         </div>
       )}
@@ -279,7 +281,11 @@ const Popup = () => {
             />
           ) : (
             <>
-              <Button fullWidth onClick={onDownloadTranscriptHandler}>
+              <Button
+                fullWidth
+                onClick={onDownloadTranscriptHandler}
+                disabled={!transcriptData.length}
+              >
                 <span>Download</span>
                 <DownloadIcon />
               </Button>

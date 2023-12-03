@@ -10,6 +10,7 @@ interface ButtonProps
   fullWidth?: boolean;
   iconRight?: React.ReactNode;
   children?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -18,11 +19,12 @@ const Button = ({
   children,
   iconRight,
   className,
+  disabled,
   ...args
 }: ButtonProps) => {
   const buttonClass = `button ${variant} ${
     fullWidth ? "full-width" : ""
-  } ${className}`;
+  } ${className} ${disabled ? "disabled" : ""}`;
 
   return (
     <button className={buttonClass} {...args}>

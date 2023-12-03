@@ -1,18 +1,19 @@
+@import 'root_css';
+
 .summary-box {
-  padding: 20px;
+  padding: 10px 20px;
   font-weight: 400;
   color: #8c8c8c;
   margin: 0;
   letter-spacing: 0.5px;
   word-spacing: -2px;
   text-align: justify;
-  max-height: 245px;
-  overflow: auto;
   .summary-title {
     font-size: 15px;
-    font-weight: 400;
+    font-weight: 600;
     margin-bottom: 10px;
     .summary-text {
+      line-height: 18px;
     }
   }
 }

@@ -26,8 +26,10 @@ const Sentiments = () => {
   const [sentimentsData, setSentimentsData] = useState<Sentiments>(null);
   const [videoSummaryData, setVideoSummaryData] = useState();
   const [commentsSummaryData, setCommentsSummaryData] = useState();
+  const [loading, setLoading] = useState(false);
   const onAnalyseClickHandler = () => {
     setSentiments(!sentiments);
+    setLoading(true);
     const message: MessageToBgScript = {
       action: MessageToBgScriptTypeEnum.CALL_AN_API,
       apiName: ApiNamesEnum.getSentiments,
@@ -82,6 +84,7 @@ const Sentiments = () => {
                   setCommentsSummaryData(data.summary);
                 });
               }
+              setLoading(false);
             }
           });
         }
@@ -99,19 +102,21 @@ const Sentiments = () => {
 
   return sentiments ? (
     <>
-
       <div className="scroll-panel">
-        <div className="sentiments-wrapper">
-          {sentimentsData &&
-            Object.entries(sentimentsData).map(([key, value]) => (
-              <EmotionRow
-                key={key}
-                type={key as keyof Sentiments}
-                percentage={value}
-                description={key.toString()}
-              />
-            ))}
-        </div>
+        {loading && <h2 style={{ textAlign: "center" }}>Analysing...</h2>}
+        {sentimentsData && (
+          <div className="sentiments-wrapper">
+            {sentimentsData &&
+              Object.entries(sentimentsData).map(([key, value]) => (
+                <EmotionRow
+                  key={key}
+                  type={key as keyof Sentiments}
+                  percentage={value}
+                  description={key.toString()}
+                />
+              ))}
+          </div>
+        )}
 
         {videoSummaryData && (
           <SummaryBox type="Video" summaryText={videoSummaryData} />
