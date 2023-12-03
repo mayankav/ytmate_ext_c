@@ -267,6 +267,7 @@ const Popup = () => {
             transcriptData={filteredTranscriptData || transcriptData}
             currentPlayingTimestamp={currentTS}
             handleBookMarkSave={handleBookMarkSave}
+            currentVideoId={currentVideoId}
           />
         </div>
       )}
