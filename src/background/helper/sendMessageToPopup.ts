@@ -1,6 +1,6 @@
 import { MessageToPopup } from "../../types";
 
-export function sendMesaageToPopup(
+export function sendMessageToPopup(
   message: MessageToPopup,
   onResponseCallback: (response: any) => void
 ) {

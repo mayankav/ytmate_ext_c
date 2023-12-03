@@ -17,11 +17,15 @@ import {
   MessageToPopupTypeEnum,
 } from "../../../types";
 import { checkSentimentsLocally } from "../../../background/helper/checkSentimentsLocally";
+import { checkSummaryLocally } from "../../../background/helper/checkSummaryLocally";
+import SummaryBox from "./components/SummaryBox";
 
 const Sentiments = () => {
   // temporary state to toggle between empty and filled sentiment screen
   const [sentiments, setSentiments] = useState(false);
   const [sentimentsData, setSentimentsData] = useState<Sentiments>(null);
+  const [videoSummaryData, setVideoSummaryData] = useState();
+  const [commentsSummaryData, setCommentsSummaryData] = useState();
   const onAnalyseClickHandler = () => {
     setSentiments(!sentiments);
     const message: MessageToBgScript = {
@@ -30,6 +34,20 @@ const Sentiments = () => {
       source: ApiSourceEnum.none,
     };
     sendMessageToBgScript(message, (response) => {});
+  };
+  const onSummarizeHandler = () => {
+    const commentsSummaryMessage: MessageToBgScript = {
+      action: MessageToBgScriptTypeEnum.CALL_AN_API,
+      apiName: ApiNamesEnum.getSummary,
+      source: "comments",
+    };
+    sendMessageToBgScript(commentsSummaryMessage, (response) => {});
+    const videoSummaryMessage: MessageToBgScript = {
+      action: MessageToBgScriptTypeEnum.CALL_AN_API,
+      apiName: ApiNamesEnum.getSummary,
+      source: "video",
+    };
+    sendMessageToBgScript(videoSummaryMessage, (response) => {});
   };
 
   useEffect(() => {
@@ -55,6 +73,14 @@ const Sentiments = () => {
                   console.log("PROPS IS sentiments", data);
                   setSentimentsData(data);
                 });
+              } else if (property === "summary") {
+                checkSummaryLocally(videoId, "video", (data) => {
+                  console.log("PROPS IS summary", data);
+                  setVideoSummaryData(data.summary);
+                });
+                checkSummaryLocally(videoId, "comments", (data) => {
+                  setCommentsSummaryData(data.summary);
+                });
               }
             }
           });
@@ -63,18 +89,39 @@ const Sentiments = () => {
     );
   }, []);
 
+  useEffect(() => {
+    console.log("In Sentiments : commentsSummaryData", commentsSummaryData);
+  }, [commentsSummaryData]);
+
+  useEffect(() => {
+    console.log("In Sentiments : videoSummaryData", videoSummaryData);
+  }, [videoSummaryData]);
+
   return sentiments ? (
     <>
-      <div className="sentiments-wrapper">
-        {sentimentsData &&
-          Object.entries(sentimentsData).map(([key, value]) => (
-            <EmotionRow
-              type={key as keyof Sentiments}
-              percentage={Math.round(value)}
-              description={key.toString()}
-            />
-          ))}
+
+      <div className="scroll-panel">
+        <div className="sentiments-wrapper">
+          {sentimentsData &&
+            Object.entries(sentimentsData).map(([key, value]) => (
+              <EmotionRow
+                key={key}
+                type={key as keyof Sentiments}
+                percentage={value}
+                description={key.toString()}
+              />
+            ))}
+        </div>
+
+        {videoSummaryData && (
+          <SummaryBox type="Video" summaryText={videoSummaryData} />
+        )}
+        {commentsSummaryData && (
+          <SummaryBox type="Comments" summaryText={commentsSummaryData} />
+        )}
+
       </div>
+
       <footer>
         <Button
           variant="secondary"
@@ -87,7 +134,12 @@ const Sentiments = () => {
       </footer>
     </>
   ) : (
-    <EmptySentimentScreen onAnalyseClickHandler={onAnalyseClickHandler} />
+    <EmptySentimentScreen
+      onAnalyseClickHandler={() => {
+        onAnalyseClickHandler();
+        onSummarizeHandler();
+      }}
+    />
   );
 };
 

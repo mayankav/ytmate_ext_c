@@ -1,6 +1,6 @@
 import { MessageToPopupTypeEnum } from "../../types";
 import { saveAnswerLocally } from "../helper/saveAnswerLocally";
-import { sendMesaageToPopup } from "../helper/sendMessageToPopup";
+import { sendMessageToPopup } from "../helper/sendMessageToPopup";
 import { API_BASE_URL } from "./constants";
 export function getAnswer(
   vId: string,
@@ -31,7 +31,7 @@ export function getAnswer(
         messageType: MessageToPopupTypeEnum.STORAGE_UPDATE,
         property: "answer",
       };
-      sendMesaageToPopup(messageToPopup, () => {});
+      sendMessageToPopup(messageToPopup, () => {});
     })
     .catch((error) => {
       console.error("Getting Answer Error:", error);

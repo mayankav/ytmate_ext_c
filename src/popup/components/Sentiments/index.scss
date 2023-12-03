@@ -1,7 +1,11 @@
-.sentiments-wrapper {
-  padding: 40px 20px;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  flex-wrap: wrap;
+.scroll-panel {
+  overflow: auto;
+  height: 450px;
+  .sentiments-wrapper {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 }
