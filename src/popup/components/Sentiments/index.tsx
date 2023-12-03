@@ -70,7 +70,7 @@ const Sentiments = () => {
           Object.entries(sentimentsData).map(([key, value]) => (
             <EmotionRow
               type={key as keyof Sentiments}
-              percentage={value}
+              percentage={Math.round(value)}
               description={key.toString()}
             />
           ))}
