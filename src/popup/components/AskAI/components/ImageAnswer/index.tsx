@@ -5,6 +5,7 @@ import {
   MessageToContentScriptTypeEnum,
 } from "../../../../../types";
 import { sendMessageToContentScript } from "../../../../helper/sendMessageToContentScript";
+import { convertTimeToMMSS } from "../../../../helper/timeConverter";
 
 interface ImageAnswerProps {
   time: number;
@@ -20,7 +21,7 @@ const ImageAnswer = ({ time, answer }: ImageAnswerProps) => {
   };
   return (
     <div className="image-ans-wrapper" onClick={timeClickHandler}>
-      <div className="image-time">{time}</div>
+      <div className="image-time">{convertTimeToMMSS(time)}</div>
       <div className="image-answer">{answer}</div>
     </div>
   );
