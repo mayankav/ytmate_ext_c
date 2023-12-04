@@ -1,13 +1,10 @@
-@import 'root_css';
+@import "root_css";
 
 .summary-box {
   padding: 10px 20px;
   font-weight: 400;
   color: #8c8c8c;
   margin: 0;
-  letter-spacing: 0.5px;
-  word-spacing: -2px;
-  text-align: justify;
   .summary-title {
     font-size: 15px;
     font-weight: 600;
